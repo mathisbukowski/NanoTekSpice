@@ -18,6 +18,10 @@ namespace nts {
     };
     class IComponent {
         public:
+          enum ComponentType
+          {
+              TEST = "test",
+          };
           virtual ~IComponent() = default;
           virtual void simulate(std::size_t tick) = 0;
           virtual nts::Tristate compute(std::size_t pin) = 0;
