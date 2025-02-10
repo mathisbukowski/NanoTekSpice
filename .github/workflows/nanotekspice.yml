@@ -41,7 +41,7 @@ jobs:
 
       - name: "Verify Executable Permissions and Presence"
         env:
-          EXECUTABLES: "$EXECUTABLES"  # Ensure to pass executables as an environment variable
+          EXECUTABLES: "$EXECUTABLES"
         run: |
           IFS=',' read -ra ADDR <<< "$EXECUTABLES"
           for executable in "${ADDR[@]}"; do
