@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SRC ${CMAKE_SOURCE_DIR}/src)
-file(GLOB_RECURSE SOURCES ${SRC}/*.cpp ${SRC}/*.hpp)
+file(GLOB_RECURSE SOURCES "${SRC}/*.cpp" "${SRC}/*.hpp")
 
 add_executable(nanotekspice ${SOURCES})
 
