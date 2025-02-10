@@ -1,3 +1,5 @@
 *.o
 *.a
 nanotekspice
+build
+cmake-build-debug

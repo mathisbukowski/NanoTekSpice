@@ -26,22 +26,29 @@ jobs:
       image: epitechcontent/epitest-docker:latest
     needs: check_repo_size
     steps:
-      - uses: actions/checkout@v4
-      - name: "Compile the program"
-        run: make
-        timeout-minutes: 2
-      - name: "Clean the repo"
-        run: make clean
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
 
-      - name: "Verify executable permissions and verify all executables are there"
+      - name: "Create Build Directory"
+        run: mkdir -p build && cd build
+
+      - name: "Compile the Program with CMake"
+        run: |
+          cd build
+          cmake ..
+          make
+        timeout-minutes: 2
+
+      - name: "Verify Executable Permissions and Presence"
+        env:
+          EXECUTABLES: "$EXECUTABLES"  # Ensure to pass executables as an environment variable
         run: |
           IFS=',' read -ra ADDR <<< "$EXECUTABLES"
-          for i in "${ADDR[@]}"; do
-              if [ -f "$i" ] && [ -x "$i" ]; then
-                  echo "$i exists and is executable."
-                  exit 0
+          for executable in "${ADDR[@]}"; do
+              if [ -f "build/$executable" ] && [ -x "build/$executable" ]; then
+                  echo "$executable exists and is executable."
               else
-                  echo "$i does not exist or is not executable."
+                  echo "$executable does not exist or is not executable."
                   exit 1
               fi
           done
