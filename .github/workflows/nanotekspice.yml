@@ -1,0 +1,116 @@
+name: NanoTekSpice
+
+env:
+  EXECUTABLES: "nanotekspice"
+  ARGS: ""
+  MIRROR_URL: "git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git"
+  MIRROR_NAME: "EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski"
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    if: github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
+    needs: check_repo_size
+    container:
+      image:  ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check_coding_style
+        run: |
+          check.sh "$(pwd)" "$(pwd)"
+          codingLogFile="$(pwd)/coding-style-reports.log"
+          if [ -s "$codingLogFile" ]; then
+            while IFS= read -r line; do
+              IFS=':' read -ra fields <<< "$line"
+              file="${fields[0]}"
+              line="${fields[1]}"
+              name="${fields[2]}"
+              type="${fields[3]}"
+              echo "::error title=$name coding style error,file=$file,line=$line::$type"
+            done < "$codingLogFile"
+            exit 1
+          else
+            echo "No coding style errors detected"
+          fi
+
+  check_program_compilation:
+    runs-on: ubuntu-latest
+    if: github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
+    container:
+      image: epitechcontent/epitest-docker:latest
+    needs: check_coding_style
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Compile the program"
+        run: make
+        timeout-minutes: 2
+      - name: "Clean the repo"
+        run: make clean
+
+      - name: "Verify executable permissions and verify all executables are there"
+        run: |
+          IFS=',' read -ra ADDR <<< "$EXECUTABLES"
+          for i in "${ADDR[@]}"; do
+              if [ -f "$i" ] && [ -x "$i" ]; then
+                  echo "$i exists and is executable."
+                  exit 0
+              else
+                  echo "$i does not exist or is not executable."
+                  exit 1
+              fi
+          done
+
+  push_to_mirror:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
+    needs: check_program_compilation
+    container:
+      image: epitechcontent/epitest-docker:latest
+    steps:
+      - name: Check if this is the mirror repository
+        id: check_repo
+        run: |
+          if [[ "${{ github.repository }}" == "${{env.MIRROR_NAME}}" ]]; then
+            echo "IS_MIRROR=true" >> $GITHUB_ENV
+          else
+            echo "IS_MIRROR=false" >> $GITHUB_ENV
+          fi
+      - name: Exit if this is the mirror repository
+        run: exit 0
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ env.MIRROR_URL }}
+          ssh_private_key: ${{ secrets.GIT_SSH_PRIVATE_KEY  }}
+
+  check_repo_size:
+    runs-on: ubuntu-latest
+    if: github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
+    steps:
+      - name: Check size of the repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: |
+          REPO_SIZE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                       "https://api.github.com/repos/${{ github.repository }}/git/trees/main?recursive=1" \
+                       | jq '.tree | map(select(.type == "blob")) | map(.size) | add')
+          if [[ "$REPO_SIZE" -ge "300000000" ]]; then
+            echo "Error: Size of the repository is too high."
+            exit 1
+          else
+            echo "Size is great: $REPO_SIZE"
+            exit 0
+          fi
