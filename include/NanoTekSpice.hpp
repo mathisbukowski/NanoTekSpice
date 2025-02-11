@@ -1,0 +1,32 @@
+/*
+** EPITECH PROJECT, 2025
+** OOP-400
+** File description:
+** NanoTekSpice.hpp
+*/
+
+#ifndef NANOTEKSPICE_HPP
+    #define NANOTEKSPICE_HPP
+
+#include <iostream>
+
+namespace nts {
+    enum Tristate {
+        UNDEFINED = (-true),
+        TRUE = true,
+        FALSE = false
+    };
+    class IComponent {
+        public:
+          enum ComponentType
+          {
+              TEST = "test",
+          };
+          virtual ~IComponent() = default;
+          virtual void simulate(std::size_t tick) = 0;
+          virtual nts::Tristate compute(std::size_t pin) = 0;
+          virtual void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) = 0;
+    };
+};
+
+#endif // NANOTEKSPICE_HPP
