@@ -20,7 +20,7 @@ namespace nts {
         public:
           enum ComponentType
           {
-              TEST = "test",
+              TEST,
           };
           virtual ~IComponent() = default;
           virtual void simulate(std::size_t tick) = 0;
