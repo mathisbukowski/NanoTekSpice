@@ -15,9 +15,12 @@ int main(int ac, char **av)
     (void)ac;
     try
     {
-        parser.parseFile(av[1]);
-        parser.getChipsets();
-        parser.getLinks();
+        if (av[1])
+        {
+            parser.parseFile(av[1]);
+            parser.getChipsets();
+            parser.getLinks();
+        }
 
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
