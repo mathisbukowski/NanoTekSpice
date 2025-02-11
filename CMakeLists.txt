@@ -15,6 +15,6 @@ file(GLOB_RECURSE HEADERS "${SRC_DIR}/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${SRC_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/include)
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Werror)

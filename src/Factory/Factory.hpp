@@ -10,7 +10,7 @@
 
 #include <memory>
 
-#include "../../include/NanoTekSpice.hpp"
+#include "NanoTekSpice.hpp"
 
 class Factory {
 public:
