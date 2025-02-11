@@ -38,19 +38,23 @@ void Parser::parseFile(const std::string &filename)
 
 std::string Parser::cleanStr(std::string str)
 {
-    std::string result = "";
+    std::string cleanStr = "";
+    bool wasSpace = false;
 
-    if (str.size() == 0)
-        return result;
-    if (str.size() == 1 && str[0] == '\n')
-        return result;
-    for (std::size_t i = 0; i < str.size(); i++) {
-        if (str[i] != '\t')
-            result += str[i];
-        if (str[i] == '#') {
-            while (str[i] != '\n')
-                i++;
+    for (size_t i = 0; i < str.size(); i++) {
+        if (str[i] == '#')
+            break;
+        if (str[i] != ' ' && str[i] != '\t') {
+            cleanStr += str[i];
+            wasSpace = false;
+        } else if (!wasSpace) {
+           cleanStr += ' ';
+            wasSpace = true;
         }
     }
-    return result;
+    if (!cleanStr.empty() && cleanStr.front() == ' ')
+        cleanStr.erase(0, 1);
+    if (!cleanStr.empty() && cleanStr.back() == ' ')
+        cleanStr.pop_back();
+    return cleanStr;
 }
