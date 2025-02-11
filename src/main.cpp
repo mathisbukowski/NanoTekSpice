@@ -6,9 +6,13 @@
 */
 
 #include <iostream>
+#include "Parser/Parser.hpp"
 
-int main(void)
+int main(int ac, char **av)
 {
-    std::cout << "Hello World" << std::endl;
+    Parser parser;
+
+    (void)ac;
+    parser.parseFile(av[1]);
     return 0;
 }
