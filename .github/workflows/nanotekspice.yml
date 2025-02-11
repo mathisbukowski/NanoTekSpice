@@ -18,81 +18,58 @@ on:
       - '.github/workflows/**'
 
 jobs:
-
   check_program_compilation:
     runs-on: ubuntu-latest
-    if: github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
     container:
       image: epitechcontent/epitest-docker:latest
-    needs: check_repo_size
     steps:
       - name: "Checkout Code"
         uses: actions/checkout@v4
 
       - name: "Create Build Directory"
-        run: mkdir -p build && cd build
+        run: mkdir -p build
 
-      - name: "Compile the Program with CMake"
+      - name: "Compile the Program with CMake and Make"
         run: |
           cd build
           cmake ..
           make
-        timeout-minutes: 2
+        timeout-minutes: 5
 
       - name: "Verify Executable Permissions and Presence"
         env:
           EXECUTABLES: "$EXECUTABLES"
         run: |
-          IFS=',' read -ra ADDR <<< "$EXECUTABLES"
-          for executable in "${ADDR[@]}"; do
-              if [ -f "build/$executable" ] && [ -x "build/$executable" ]; then
-                  echo "$executable exists and is executable."
-              else
-                  echo "$executable does not exist or is not executable."
-                  exit 1
-              fi
+          IFS=','; for executable in $EXECUTABLES; do
+            if [ -f "build/$executable" ] && [ -x "build/$executable" ]; then
+                echo "$executable exists and is executable."
+            else
+                echo "$executable does not exist or is not executable."
+                exit 1
+            fi
+          done
+
+      - name: "Test Executable Program Launch"
+        env:
+          ARGS: "$ARGS"
+        run: |
+          for executable in $EXECUTABLES; do
+            echo "Testing execution of $executable with arguments: $ARGS"
+            ./build/$executable $ARGS || exit 1
           done
 
   push_to_mirror:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
+    if: github.event_name == 'push'
     needs: check_program_compilation
-    container:
-      image: epitechcontent/epitest-docker:latest
     steps:
-      - name: Check if this is the mirror repository
-        id: check_repo
-        run: |
-          if [[ "${{ github.repository }}" == "${{env.MIRROR_NAME}}" ]]; then
-            echo "IS_MIRROR=true" >> $GITHUB_ENV
-          else
-            echo "IS_MIRROR=false" >> $GITHUB_ENV
-          fi
-      - name: Exit if this is the mirror repository
-        run: exit 0
-      - uses: actions/checkout@v4
+      - name: "Checkout Code"
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: pixta-dev/repository-mirroring-action@v1
+
+      - name: "Push to Mirror Repository"
+        uses: pixta-dev/repository-mirroring-action@v1
         with:
           target_repo_url: ${{ env.MIRROR_URL }}
-          ssh_private_key: ${{ secrets.GIT_SSH_PRIVATE_KEY  }}
-
-  check_repo_size:
-    runs-on: ubuntu-latest
-    if: github.repository != 'git@github.com:EpitechPromo2028/B-OOP-400-LIL-4-1-tekspice-mathis.bukowski.git'
-    steps:
-      - name: Check size of the repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        run: |
-          REPO_SIZE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-                       "https://api.github.com/repos/${{ github.repository }}/git/trees/main?recursive=1" \
-                       | jq '.tree | map(select(.type == "blob")) | map(.size) | add')
-          if [[ "$REPO_SIZE" -ge "300000000" ]]; then
-            echo "Error: Size of the repository is too high."
-            exit 1
-          else
-            echo "Size is great: $REPO_SIZE"
-            exit 0
-          fi
+          ssh_private_key: ${{ secrets.GIT_SSH_PRIVATE_KEY }}
