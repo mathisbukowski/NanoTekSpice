@@ -6,9 +6,31 @@
 */
 
 #include <iostream>
+#include "Parser/Parser.hpp"
 
-int main(void)
+int main(int ac, char **av)
 {
-    std::cout << "Hello World" << std::endl;
+    Parser parser;
+
+    (void)ac;
+    try
+    {
+        parser.parseFile(av[1]);
+        parser.getChipsets();
+        parser.getLinks();
+
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
+
+    for (auto &it : parser._chipsets) {
+        std::cout << it.first << " " << it.second << std::endl;
+    }
+    for (auto &it : parser._links) {
+        std::cout << it.first << " " << it.second << std::endl;
+        std::cout << "value of first pin: " << parser.separateValueFromKeyOfLinks(it.first) << std::endl;
+        std::cout << "value of second pin: " << parser.separateValueFromKeyOfLinks(it.second) << std::endl;
+    }
     return 0;
 }
