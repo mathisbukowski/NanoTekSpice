@@ -18,6 +18,7 @@ class Parser {
     Parser();
     ~Parser();
     void parseFile(const std::string &filename);
+    std::string cleanStr(std::string str);
   private:
     std::vector<std::string> _input;
 };

@@ -27,9 +27,30 @@ void Parser::parseFile(const std::string &filename)
         return;
     }
     while (std::getline(inputFile, line)) {
-        _input.push_back(line);
+        line = cleanStr(line);
+        if (line.size() > 0)
+            _input.push_back(line);
     }
     inputFile.close();
     if (_input.size() == 0)
         std::cerr << "Error: file is empty" << std::endl;
+}
+
+std::string Parser::cleanStr(std::string str)
+{
+    std::string result = "";
+
+    if (str.size() == 0)
+        return result;
+    if (str.size() == 1 && str[0] == '\n')
+        return result;
+    for (std::size_t i = 0; i < str.size(); i++) {
+        if (str[i] != '\t')
+            result += str[i];
+        if (str[i] == '#') {
+            while (str[i] != '\n')
+                i++;
+        }
+    }
+    return result;
 }
