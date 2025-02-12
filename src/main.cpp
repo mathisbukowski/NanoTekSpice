@@ -20,6 +20,8 @@ int main(int ac, char **av)
             parser.parseFile(av[1]);
             parser.getChipsets();
             parser.getLinks();
+            if (!parser.checkContentOfInputFile())
+                throw Parser::ParserError("Error: invalid file content");
         }
 
     } catch (const std::exception &e) {

@@ -37,6 +37,8 @@ class Parser {
     void parseLinkLine(const std::string &line, std::string &type, std::string &name);
     void parseLinks(size_t &i);
     int separateValueFromKeyOfLinks(const std::string &link);
+    std::string getNameOfLink(std::pair<std::string, std::string> &link);
+    bool checkContentOfInputFile();
 
   private:
     std::vector<std::string> _input;
