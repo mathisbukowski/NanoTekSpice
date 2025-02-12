@@ -158,3 +158,33 @@ int Parser::separateValueFromKeyOfLinks(const std::string& link)
             return std::stoi(link.substr(i + 1));
     return 84;
 }
+
+std::string Parser::getNameOfLink(std::pair<std::string, std::string> &link)
+{
+    std::string name;
+
+    for (size_t i = 0; i < link.first.size(); i++)
+        if (link.first[i] == ':')
+            name = link.first.substr(0, i);
+    return name;
+}
+
+bool Parser::checkContentOfInputFile()
+{
+    if (_chipsets.empty())
+        throw ParserError("Error: no chipsets found");
+    if (_links.empty())
+        throw ParserError("Error: no links found");
+    for (auto &it : _links)
+    {
+        for (auto &it2 : _chipsets)
+        {
+            if (getNameOfLink(it) == it2.second)
+                break;
+            if (&it2 == &_chipsets.back())
+                throw ParserError("Error: link to non-existing component");
+        }
+    }
+    return true;
+}
+
