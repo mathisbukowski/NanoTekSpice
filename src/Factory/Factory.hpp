@@ -14,8 +14,9 @@
 
 class Factory {
 public:
-    virtual std::unique_ptr<nts::IComponent> createComponent(const std::string &type);
-    virtual ~Factory() = default;
+    Factory() = default;
+    ~Factory() = default;
+     std::unique_ptr<nts::IComponent> createComponent(const std::string &type);
 };
 
 
