@@ -12,11 +12,13 @@
 
 #include "NanoTekSpice.hpp"
 
-class Factory {
-public:
-    virtual std::unique_ptr<nts::IComponent> createComponent(const std::string &type);
-    virtual ~Factory() = default;
-};
+namespace nts {
+    class Factory {
+    public:
+        virtual std::unique_ptr<nts::IComponent> createComponent(const std::string &type);
+        virtual ~Factory() = default;
+    };
+}
 
 
 

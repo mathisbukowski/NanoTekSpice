@@ -33,15 +33,28 @@ void nts::AComponent::setLink(std::size_t pin, nts::IComponent &other, std::size
     (void)otherPin;
 }
 
-void nts::AComponent::dump() const
+std::vector<std::pair<std::string, std::string>> nts::AComponent::getInput()
 {
-    std::cout << "tick: " << _tick << std::endl;
+    return _input;
+}
+
+std::vector<std::pair<std::string, std::string>> nts::AComponent::getOutput()
+{
+    return this->_output;
+}
+
+void nts::AComponent::dump()
+{
+    std::vector<std::pair<std::string, std::string>> input = getInput();
+    std::vector<std::pair<std::string, std::string>> output = getOutput();
+
+    std::cout << "tick: " << getTick() << std::endl;
     std::cout << "input(s):" << std::endl;
-    for (auto &p : _input) {
+    for (auto &p : input) {
         std::cout <<  p.first << ": " << p.second << std::endl;
     }
     std::cout << "output(s):" << std::endl;
-    for (auto &p : _output) {
+    for (auto &p : output) {
         std::cout <<  p.first << ": " << p.second << std::endl;
     }
 }

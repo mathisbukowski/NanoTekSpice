@@ -5,37 +5,17 @@
 ** 02
 */
 
+#include "Core/Core.hpp"
 #include <iostream>
 #include "Parser/Parser.hpp"
 
 int main(int ac, char **av)
 {
-    Parser parser;
+    nts::Core core;
 
-    (void)ac;
-    try
-    {
-        if (av[1])
-        {
-            parser.parseFile(av[1]);
-            parser.getChipsets();
-            parser.getLinks();
-            if (!parser.checkContentOfInputFile())
-                throw Parser::ParserError("Error: invalid file content");
-        }
-
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+    if (ac != 2) {
+        std::cerr << "Usage: ./nanotekspice [file]" << std::endl;
         return 84;
     }
-
-    for (auto &it : parser._chipsets) {
-        std::cout << it.first << " " << it.second << std::endl;
-    }
-    for (auto &it : parser._links) {
-        std::cout << it.first << " " << it.second << std::endl;
-        std::cout << "value of first pin: " << parser.separateValueFromKeyOfLinks(it.first) << std::endl;
-        std::cout << "value of second pin: " << parser.separateValueFromKeyOfLinks(it.second) << std::endl;
-    }
-    return 0;
+    return core.run(av[1]);
 }

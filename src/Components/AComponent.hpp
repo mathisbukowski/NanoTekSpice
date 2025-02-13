@@ -18,7 +18,7 @@ namespace nts {
         void simulate(std::size_t tick) override;
         nts::Tristate compute(std::size_t pin) override;
         void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
-        void dump() const;
+        static void dump();
         std::string getName() const;
         void setName(std::string name);
         nts::IComponent::ComponentType getType() const;
@@ -30,6 +30,8 @@ namespace nts {
         void setLink(const std::string& pin, const std::string& value);
         void setInput(const std::string& pin, const std::string& value);
         void setOutput(const std::string& pin, const std::string& value);
+        static std::vector<std::pair<std::string, std::string>> getInput();
+        static std::vector<std::pair<std::string, std::string>> getOutput();
 
     protected:
         std::string _name;

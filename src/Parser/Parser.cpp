@@ -9,21 +9,21 @@
 
 #include <unordered_set>
 
-Parser::Parser()
+nts::Parser::Parser()
 {
     _input = std::vector<std::string>();
     _chipsets = std::vector<std::pair<std::string, std::string>>();
     _links = std::vector<std::pair<std::string, std::string>>();
 }
 
-Parser::~Parser()
+nts::Parser::~Parser()
 {
     _chipsets.clear();
     _links.clear();
     _input.clear();
 }
 
-void Parser::parseFile(const std::string &filename)
+void nts::Parser::parseFile(const std::string &filename)
 {
     std::ifstream inputFile(filename);
     std::string line;
@@ -40,7 +40,7 @@ void Parser::parseFile(const std::string &filename)
         throw ParserError("Error: empty file");
 }
 
-std::string Parser::cleanStr(std::string str)
+std::string nts::Parser::cleanStr(std::string str)
 {
     std::string cleanStr = "";
     bool wasSpace = false;
@@ -63,7 +63,7 @@ std::string Parser::cleanStr(std::string str)
     return cleanStr;
 }
 
-void Parser::getChipsets()
+void nts::Parser::getChipsets()
 {
     for (size_t i = 0; i < _input.size(); i++) {
         if (_input[i] == ".chipsets:") {
@@ -73,7 +73,7 @@ void Parser::getChipsets()
     }
 }
 
-void Parser::parseChipsets(size_t &i)
+void nts::Parser::parseChipsets(size_t &i)
 {
     std::string name;
     std::string type;
@@ -90,7 +90,7 @@ void Parser::parseChipsets(size_t &i)
     }
 }
 
-void Parser::parseChipsetLine(const std::string &line, std::string &type, std::string &name)
+void nts::Parser::parseChipsetLine(const std::string &line, std::string &type, std::string &name)
 {
     size_t j = 0;
     type.clear();
@@ -107,7 +107,7 @@ void Parser::parseChipsetLine(const std::string &line, std::string &type, std::s
     }
 }
 
-void Parser::getLinks()
+void nts::Parser::getLinks()
 {
     for (size_t i = 0; i < _input.size(); i++) {
         if (_input[i] == ".links:") {
@@ -117,7 +117,7 @@ void Parser::getLinks()
     }
 }
 
-void Parser::parseLinks(size_t &i)
+void nts::Parser::parseLinks(size_t &i)
 {
     std::string name;
     std::string type;
@@ -134,7 +134,7 @@ void Parser::parseLinks(size_t &i)
     }
 }
 
-void Parser::parseLinkLine(const std::string &line, std::string &type, std::string &name)
+void nts::Parser::parseLinkLine(const std::string &line, std::string &type, std::string &name)
 {
     size_t j = 0;
     type.clear();
@@ -151,7 +151,7 @@ void Parser::parseLinkLine(const std::string &line, std::string &type, std::stri
     }
 }
 
-int Parser::separateValueFromKeyOfLinks(const std::string& link)
+int nts::Parser::separateValueFromKeyOfLinks(const std::string& link)
 {
     for (size_t i = 0; i < link.size(); i++)
         if (link[i] == ':')
@@ -159,7 +159,7 @@ int Parser::separateValueFromKeyOfLinks(const std::string& link)
     return 84;
 }
 
-std::string Parser::getNameOfLink(std::pair<std::string, std::string> &link)
+std::string nts::Parser::getNameOfLink(std::pair<std::string, std::string> &link)
 {
     std::string name;
 
@@ -169,7 +169,7 @@ std::string Parser::getNameOfLink(std::pair<std::string, std::string> &link)
     return name;
 }
 
-bool Parser::checkContentOfInputFile()
+bool nts::Parser::checkContentOfInputFile()
 {
     if (_chipsets.empty())
         throw ParserError("Error: no chipsets found");
