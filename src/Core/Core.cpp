@@ -11,13 +11,11 @@
 
 #include "Components/AComponent.hpp"
 
-nts::Core::Core()
+nts::Core::Core() : _tick(0)
 {
 }
 
-nts::Core::~Core()
-{
-}
+nts::Core::~Core() = default;
 
 int nts::Core::getAllArgs(Parser parser, const std::string &file)
 {
@@ -44,9 +42,9 @@ void nts::Core::exit()
 void nts::Core::process(const std::string input)
 {
     if (input == "simulate")
-        simulate();
+        simulate(1);
     else if (input == "display")
-        nts::AComponent::dump();
+        dump();
     else
         std::cerr << "Error: invalid command" << std::endl;
 }
@@ -79,4 +77,56 @@ int nts::Core::run(const char *file)
         return 84;
     loop();
     return 0;
+}
+
+void nts::Core::simulate(std::size_t tick)
+{
+    (void)tick;
+}
+
+nts::Tristate nts::Core::compute(std::size_t pin)
+{
+    (void)pin;
+    return nts::UNDEFINED;
+}
+
+std::vector<std::pair<std::string, std::string>> nts::Core::getInput()
+{
+    return _input;
+}
+
+std::vector<std::pair<std::string, std::string>> nts::Core::getOutput()
+{
+    return _output;
+}
+
+void nts::Core::dump()
+{
+    std::vector<std::pair<std::string, std::string>> input = getInput();
+    std::vector<std::pair<std::string, std::string>> output = getOutput();
+
+    std::cout << "tick: " << getTick() << std::endl;
+    std::cout << "input(s):" << std::endl;
+    for (auto &p : input) {
+        std::cout <<  p.first << ": " << p.second << std::endl;
+    }
+    std::cout << "output(s):" << std::endl;
+    for (auto &p : output) {
+        std::cout <<  p.first << ": " << p.second << std::endl;
+    }
+}
+
+std::size_t nts::Core::getTick() const
+{
+    return _tick;
+}
+
+void nts::Core::setInput(const std::string& pin, const std::string& value)
+{
+    _input.emplace_back(pin, value);
+}
+
+void nts::Core::setOutput(const std::string& pin, const std::string& value)
+{
+    _output.emplace_back(pin, value);
 }

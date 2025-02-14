@@ -12,19 +12,8 @@
 nts::AComponent::AComponent(std::string name, nts::IComponent::ComponentType type) : _type(type)
 {
     _name = std::move(name);
-    _tick = 0;
 }
 
-void nts::AComponent::simulate(std::size_t tick)
-{
-    _tick = tick;
-}
-
-nts::Tristate nts::AComponent::compute(std::size_t pin)
-{
-    (void)pin;
-    return nts::UNDEFINED;
-}
 
 void nts::AComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
@@ -33,31 +22,6 @@ void nts::AComponent::setLink(std::size_t pin, nts::IComponent &other, std::size
     (void)otherPin;
 }
 
-std::vector<std::pair<std::string, std::string>> nts::AComponent::getInput()
-{
-    return _input;
-}
-
-std::vector<std::pair<std::string, std::string>> nts::AComponent::getOutput()
-{
-    return this->_output;
-}
-
-void nts::AComponent::dump()
-{
-    std::vector<std::pair<std::string, std::string>> input = getInput();
-    std::vector<std::pair<std::string, std::string>> output = getOutput();
-
-    std::cout << "tick: " << getTick() << std::endl;
-    std::cout << "input(s):" << std::endl;
-    for (auto &p : input) {
-        std::cout <<  p.first << ": " << p.second << std::endl;
-    }
-    std::cout << "output(s):" << std::endl;
-    for (auto &p : output) {
-        std::cout <<  p.first << ": " << p.second << std::endl;
-    }
-}
 
 std::string nts::AComponent::getName() const
 {
@@ -77,11 +41,6 @@ nts::IComponent::ComponentType nts::AComponent::getType() const
 std::vector<std::pair<std::string, std::string>> nts::AComponent::getPins() const
 {
     return _pins;
-}
-
-std::size_t nts::AComponent::getTick() const
-{
-    return _tick;
 }
 
 void nts::AComponent::setPinValue(const std::string& pin, const std::string& value)
@@ -112,14 +71,4 @@ void nts::AComponent::setPin(const std::string& pin, const std::string& value)
 void nts::AComponent::setLink(const std::string& pin, const std::string& value)
 {
     _links.emplace_back(pin, value);
-}
-
-void nts::AComponent::setInput(const std::string& pin, const std::string& value)
-{
-    _input.emplace_back(pin, value);
-}
-
-void nts::AComponent::setOutput(const std::string& pin, const std::string& value)
-{
-    _output.emplace_back(pin, value);
 }
