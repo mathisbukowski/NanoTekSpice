@@ -9,28 +9,29 @@
 #define NANOTEKSPICE_COMPONENT_HPP
 
 #include "../../include/NanoTekSpice.hpp"
-#include <vector>
+#include <unordered_map>
 
 namespace nts {
     class AComponent : public IComponent {
     public:
-        AComponent(std::string name, ComponentType type);
-        void setLink(std::size_t pin, IComponent &other, std::size_t otherPin);
+        AComponent(const std::string& name, ComponentType type);
+        virtual ~AComponent() = default;
+
+        void setLink(std::size_t pin, IComponent &other, std::size_t otherPin) override;
+        void setPinValue(std::size_t pin, Tristate value);
+        Tristate getPinValue(std::size_t pin) const;
+
         std::string getName() const;
-        void setName(std::string name);
         ComponentType getType() const;
-        std::vector<std::pair<std::string, std::string>> getPins() const;
-        void setPinValue(const std::string& pin, const std::string& value);
-        std::string getPinValue(const std::string& pin) const;
-        void setPin(const std::string& pin, const std::string& value);
-        virtual void simulate(std::size_t tick) = 0;
-        virtual Tristate compute(std::size_t pin) = 0;
+
+        virtual void simulate(std::size_t tick) override = 0;
+        virtual Tristate compute(std::size_t pin) override = 0;
 
     protected:
         std::string _name;
-        const ComponentType _type;
-        std::vector<std::pair<std::string, std::string>> _pins;
-        std::vector<std::pair<std::string, std::string>> _links;
+        ComponentType _type;
+        std::unordered_map<std::size_t, Tristate> _pins;
+        std::unordered_map<std::size_t, std::pair<IComponent*, std::size_t>> _links;
     };
 };
 
