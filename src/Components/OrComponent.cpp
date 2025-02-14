@@ -16,3 +16,7 @@ nts::Tristate nts::OrComponent::compute(std::size_t pin)
     (void)pin;
     return nts::UNDEFINED;
 }
+void nts::OrComponent::simulate(std::size_t tick)
+{
+    (void)tick;
+}

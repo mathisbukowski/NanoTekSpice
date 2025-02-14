@@ -24,6 +24,8 @@ namespace nts {
         std::string getPinValue(const std::string& pin) const;
         void setPin(const std::string& pin, const std::string& value);
         void setLink(const std::string& pin, const std::string& value);
+        virtual void simulate(std::size_t tick) = 0;
+        virtual nts::Tristate compute(std::size_t pin) = 0;
 
     protected:
         std::string _name;

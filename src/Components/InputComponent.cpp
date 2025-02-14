@@ -16,3 +16,8 @@ nts::Tristate nts::InputComponent::compute(std::size_t pin)
     (void)pin;
     return nts::UNDEFINED;
 }
+
+void nts::InputComponent::simulate(std::size_t tick)
+{
+    (void)tick;
+}

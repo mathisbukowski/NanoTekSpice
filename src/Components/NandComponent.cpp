@@ -16,3 +16,8 @@ nts::Tristate nts::NandComponent::compute(std::size_t pin)
     (void)pin;
     return nts::UNDEFINED;
 }
+
+void nts::NandComponent::simulate(std::size_t tick)
+{
+    (void)tick;
+}

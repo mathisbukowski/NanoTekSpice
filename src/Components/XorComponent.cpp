@@ -16,3 +16,8 @@ nts::Tristate nts::XorComponent::compute(std::size_t pin)
     (void)pin;
     return nts::UNDEFINED;
 }
+
+void nts::XorComponent::simulate(std::size_t tick)
+{
+    (void)tick;
+}

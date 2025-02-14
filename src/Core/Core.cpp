@@ -8,8 +8,10 @@
 #include "Core.hpp"
 
 #include <csignal>
+#include <memory>
 
 #include "Components/AComponent.hpp"
+#include "Factory/Factory.hpp"
 
 nts::Core::Core() : _tick(0)
 {
@@ -17,14 +19,14 @@ nts::Core::Core() : _tick(0)
 
 nts::Core::~Core() = default;
 
-int nts::Core::getAllArgs(Parser parser, const std::string &file)
+int nts::Core::getAllArgs(Parser *parser, const std::string &file)
 {
     try
     {
-        parser.parseFile(file);
-        parser.getChipsets();
-        parser.getLinks();
-        if (!parser.checkContentOfInputFile())
+        parser->parseFile(file);
+        parser->getChipsets();
+        parser->getLinks();
+        if (!parser->checkContentOfInputFile())
             throw Parser::ParserError("Error: invalid file content");
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
@@ -41,17 +43,40 @@ void nts::Core::exit()
 
 void nts::Core::process(const std::string input)
 {
-    if (input == "simulate")
-        simulate(1);
-    else if (input == "display")
+    if (input == "display")
         dump();
     else
         std::cerr << "Error: invalid command" << std::endl;
 }
 
+void nts::Core::add_components(std::vector<std::pair<std::string, std::string>>& chipsets)
+{
+    Factory factory;
+    for (auto &chipset : chipsets) {
+        std::unique_ptr<nts::IComponent> component = factory.createComponent(chipset.first);
+        if (component) {
+            AComponent *comp = dynamic_cast<AComponent *>(component.get());
+            comp->setName(chipset.second);
+            _components.insert(std::make_pair(chipset.second, std::move(component)));
+        }
+    }
+    for (auto &chipset :  chipsets) {
+        std::cout << "coucou" << std::endl;
+        if (chipset.first == "input") {
+            _input.emplace_back(chipset.second, "0");
+        }
+        if (chipset.first == "output") {
+            _output.emplace_back(chipset.second, "0");
+
+        }
+    }
+}
+
+
 int nts::Core::loop()
 {
     std::string input;
+
 
     signal(SIGINT, [](int) { nts::Core::exit(); });
     while (true) {
@@ -67,7 +92,7 @@ int nts::Core::loop()
 
 int nts::Core::run(const char *file)
 {
-    Parser parser;
+    Parser *parser = new Parser();
 
     if (!file) {
         std::cerr << "Usage: ./nanotekspice [file]" << std::endl;
@@ -75,19 +100,9 @@ int nts::Core::run(const char *file)
     }
     if (getAllArgs(parser, file) == 84)
         return 84;
+    add_components(parser->_chipsets);
     loop();
     return 0;
-}
-
-void nts::Core::simulate(std::size_t tick)
-{
-    (void)tick;
-}
-
-nts::Tristate nts::Core::compute(std::size_t pin)
-{
-    (void)pin;
-    return nts::UNDEFINED;
 }
 
 std::vector<std::pair<std::string, std::string>> nts::Core::getInput()
