@@ -17,7 +17,7 @@ nts::AComponent::AComponent(const std::string& name, ComponentType type)
 
 void nts::AComponent::setLink(std::size_t pin, IComponent &other, std::size_t otherPin)
 {
-    _links[pin] = std::make_pair(&other, otherPin);
+    _links[pin] = {&other, otherPin};
 }
 
 void nts::AComponent::setPinValue(std::size_t pin, Tristate value)
@@ -38,4 +38,9 @@ std::string nts::AComponent::getName() const
 nts::IComponent::ComponentType nts::AComponent::getType() const
 {
     return _type;
+}
+
+void nts::AComponent::setName(const std::string& name)
+{
+    _name = name;
 }

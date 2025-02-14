@@ -22,6 +22,7 @@ namespace nts {
         Tristate getPinValue(std::size_t pin) const;
 
         std::string getName() const;
+        void setName(const std::string& name);
         ComponentType getType() const;
 
         virtual void simulate(std::size_t tick) override = 0;
