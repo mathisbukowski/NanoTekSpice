@@ -9,14 +9,20 @@
 
 nts::AndComponent::AndComponent(std::string name) : AComponent(name, AND)
 {
+    _pins[1] = UNDEFINED;
+    _pins[2] = UNDEFINED;
+    _pins[3] = UNDEFINED;
 }
 
 nts::Tristate nts::AndComponent::compute(std::size_t pin)
 {
     if (pin == 3) {
-        if (_pins[0].second == "1" && _pins[1].second == "1")
+        Tristate a = _pins[1];
+        Tristate b = _pins[2];
+
+        if (a == TRUE && b == TRUE)
             return TRUE;
-        if (_pins[0].second == "0" || _pins[1].second == "0")
+        if (a == FALSE || b == FALSE)
             return FALSE;
         return UNDEFINED;
     }
@@ -26,4 +32,5 @@ nts::Tristate nts::AndComponent::compute(std::size_t pin)
 void nts::AndComponent::simulate(std::size_t tick)
 {
     (void)tick;
+    _pins[3] = compute(3);
 }
