@@ -6,6 +6,8 @@
 */
 
 #include "Factory.hpp"
+#include <memory>
+#include "NanoTekSpice.hpp"
 #include "Components/AndComponent.hpp"
 #include "Components/ClockComponent.hpp"
 #include "Components/InputComponent.hpp"
@@ -16,7 +18,7 @@
 #include "Components/OutputComponent.hpp"
 #include "Components/XorComponent.hpp"
 
-Factory::Factory()
+nts::Factory::Factory()
 {
     componentMap = {
             {"and", []() { return std::make_unique<nts::AndComponent>("and"); }},
@@ -31,7 +33,7 @@ Factory::Factory()
     };
 }
 
-std::unique_ptr<nts::IComponent> Factory::createComponent(const std::string &type)
+std::unique_ptr<nts::IComponent> nts::Factory::createComponent(const std::string &type)
 {
     auto it = componentMap.find(type);
     if (it != componentMap.end()) {

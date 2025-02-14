@@ -11,6 +11,7 @@
 #include <iostream>
 
 namespace nts {
+    class Factory;
     enum Tristate {
         UNDEFINED = (-true),
         TRUE = true,

@@ -13,15 +13,17 @@
 #include <functional>
 #include "NanoTekSpice.hpp"
 
-class Factory {
-public:
-    Factory();
-    ~Factory() = default;
-     std::unique_ptr<nts::IComponent> createComponent(const std::string &type);
+namespace nts {
+    class Factory {
+    public:
+        Factory();
+        ~Factory() = default;
+        std::unique_ptr<IComponent> createComponent(const std::string &type);
 
-private:
-    std::map<std::string, std::function<std::unique_ptr<nts::IComponent>()>> componentMap;
-};
+    private:
+        std::map<std::string, std::function<std::unique_ptr<IComponent>()>> componentMap;
+    };
+}
 
 
 
