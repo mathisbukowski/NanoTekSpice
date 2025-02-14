@@ -7,14 +7,14 @@
 
 #include "NandComponent.hpp"
 
-nts::NandComponent::NandComponent(std::string name) : AComponent(name, nts::IComponent::ComponentType::NAND)
+nts::NandComponent::NandComponent(std::string name) : AComponent(name, NAND)
 {
 }
 
 nts::Tristate nts::NandComponent::compute(std::size_t pin)
 {
     (void)pin;
-    return nts::UNDEFINED;
+    return UNDEFINED;
 }
 
 void nts::NandComponent::simulate(std::size_t tick)

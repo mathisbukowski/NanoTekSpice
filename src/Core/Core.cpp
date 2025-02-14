@@ -49,10 +49,10 @@ void nts::Core::process(const std::string input)
         std::cerr << "Error: invalid command" << std::endl;
 }
 
-void nts::Core::add_components(std::vector<std::pair<std::string, std::string>>& chipsets)
+void nts::Core::addComponents(Parser *parser)
 {
     Factory factory;
-    for (auto &chipset : chipsets) {
+    for (auto &chipset : parser->_chipsets) {
         std::unique_ptr<nts::IComponent> component = factory.createComponent(chipset.first);
         if (component) {
             AComponent *comp = dynamic_cast<AComponent *>(component.get());
@@ -60,8 +60,7 @@ void nts::Core::add_components(std::vector<std::pair<std::string, std::string>>&
             _components.insert(std::make_pair(chipset.second, std::move(component)));
         }
     }
-    for (auto &chipset :  chipsets) {
-        std::cout << "coucou" << std::endl;
+    for (auto &chipset :  parser->_chipsets) {
         if (chipset.first == "input") {
             _input.emplace_back(chipset.second, "0");
         }
@@ -100,8 +99,10 @@ int nts::Core::run(const char *file)
     }
     if (getAllArgs(parser, file) == 84)
         return 84;
-    add_components(parser->_chipsets);
-    loop();
+    //addComponents(parser->_chipsets, parser->_links);
+    for (auto &link : parser->_links) {
+        std::cout << link.first << " " << link.second << std::endl;
+    }
     return 0;
 }
 

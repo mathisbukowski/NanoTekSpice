@@ -7,14 +7,14 @@
 
 #include "NotComponent.hpp"
 
-nts::NotComponent::NotComponent(std::string name) : AComponent(name, nts::IComponent::ComponentType::NOT)
+nts::NotComponent::NotComponent(std::string name) : AComponent(name, NOT)
 {
 }
 
 nts::Tristate nts::NotComponent::compute(std::size_t pin)
 {
     (void)pin;
-    return nts::UNDEFINED;
+    return UNDEFINED;
 }
 
 void nts::NotComponent::simulate(std::size_t tick)

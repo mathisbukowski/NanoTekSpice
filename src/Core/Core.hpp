@@ -29,15 +29,15 @@ namespace nts {
         int run(const char *file);
         int loop();
         static void exit();
-        int getAllArgs(nts::Parser *parser, const std::string &file);
-        void process(const std::string input);
+        int getAllArgs(Parser *parser, const std::string &file);
+        void process(std::string input);
         void dump();
         std::vector<std::pair<std::string, std::string>> getOutput();
         std::vector<std::pair<std::string, std::string>> getInput();
         std::size_t getTick() const;
         void setOutput(const std::string& pin, const std::string& value);
         void setInput(const std::string& pin, const std::string& value);
-        void add_components(std::vector<std::pair<std::string, std::string>> &chipsets);
+        void addComponents(Parser *parser);
 
     private:
         std::vector<std::pair<std::string, std::string>> _output;

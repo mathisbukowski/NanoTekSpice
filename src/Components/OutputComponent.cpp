@@ -7,14 +7,14 @@
 
 #include "OutputComponent.hpp"
 
-nts::OutputComponent::OutputComponent(std::string name) : AComponent(name, nts::IComponent::ComponentType::OUTPUT)
+nts::OutputComponent::OutputComponent(std::string name) : AComponent(name, OUTPUT)
 {
 }
 
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
     (void)pin;
-    return nts::UNDEFINED;
+    return UNDEFINED;
 }
 
 void nts::OutputComponent::simulate(std::size_t tick)

@@ -7,14 +7,14 @@
 
 #include "NorComponent.hpp"
 
-nts::NorComponent::NorComponent(std::string name) : AComponent(name, nts::IComponent::ComponentType::NOR)
+nts::NorComponent::NorComponent(std::string name) : AComponent(name, NOR)
 {
 }
 
 nts::Tristate nts::NorComponent::compute(std::size_t pin)
 {
     (void)pin;
-    return nts::UNDEFINED;
+    return UNDEFINED;
 }
 
 void nts::NorComponent::simulate(std::size_t tick)

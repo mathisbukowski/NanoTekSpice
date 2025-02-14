@@ -16,7 +16,7 @@ namespace nts {
         NotComponent(std::string name);
         ~NotComponent() = default;
     private:
-        nts::Tristate compute(std::size_t pin) override;
+        Tristate compute(std::size_t pin) override;
         void simulate(std::size_t tick) override;
     };
 };

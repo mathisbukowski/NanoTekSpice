@@ -9,13 +9,13 @@
 
 #include <utility>
 
-nts::AComponent::AComponent(std::string name, nts::IComponent::ComponentType type) : _type(type)
+nts::AComponent::AComponent(std::string name, ComponentType type) : _type(type)
 {
     _name = std::move(name);
 }
 
 
-void nts::AComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
+void nts::AComponent::setLink(std::size_t pin, IComponent &other, std::size_t otherPin)
 {
     (void)pin;
     (void)other;
@@ -66,9 +66,4 @@ std::string nts::AComponent::getPinValue(const std::string& pin) const
 void nts::AComponent::setPin(const std::string& pin, const std::string& value)
 {
     _pins.emplace_back(pin, value);
-}
-
-void nts::AComponent::setLink(const std::string& pin, const std::string& value)
-{
-    _links.emplace_back(pin, value);
 }

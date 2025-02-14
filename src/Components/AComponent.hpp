@@ -14,22 +14,21 @@
 namespace nts {
     class AComponent : public IComponent {
     public:
-        AComponent(std::string name, nts::IComponent::ComponentType type);
-        void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin);
+        AComponent(std::string name, ComponentType type);
+        void setLink(std::size_t pin, IComponent &other, std::size_t otherPin);
         std::string getName() const;
         void setName(std::string name);
-        nts::IComponent::ComponentType getType() const;
+        ComponentType getType() const;
         std::vector<std::pair<std::string, std::string>> getPins() const;
         void setPinValue(const std::string& pin, const std::string& value);
         std::string getPinValue(const std::string& pin) const;
         void setPin(const std::string& pin, const std::string& value);
-        void setLink(const std::string& pin, const std::string& value);
         virtual void simulate(std::size_t tick) = 0;
-        virtual nts::Tristate compute(std::size_t pin) = 0;
+        virtual Tristate compute(std::size_t pin) = 0;
 
     protected:
         std::string _name;
-        const nts::IComponent::ComponentType _type;
+        const ComponentType _type;
         std::vector<std::pair<std::string, std::string>> _pins;
         std::vector<std::pair<std::string, std::string>> _links;
     };
