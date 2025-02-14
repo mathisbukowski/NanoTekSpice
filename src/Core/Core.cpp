@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "Components/AComponent.hpp"
+#include "Components/ClockComponent.hpp"
 #include "Factory/Factory.hpp"
 
 nts::Core::Core() : _tick(0)
@@ -41,12 +42,55 @@ void nts::Core::exit()
     std::exit(0);
 }
 
+void nts::Core::editValueViaInput(const std::string& input)
+{
+    std::string name;
+    std::string value;
+    std::size_t pos = input.find("=");
+
+    if (pos == std::string::npos)
+        throw Core::CoreError("Error: invalid input");
+    name = input.substr(0, pos);
+    value = input.substr(pos + 1);
+    if (value != "0" && value != "1" && value != "U")
+        throw CoreError("Error: invalid value");
+    if (_components.find(name) == _components.end())
+        throw CoreError("Error: invalid input");
+    AComponent *comp = dynamic_cast<AComponent *>(_components[name].get());
+    comp->setPinValue(1, value == "U" ? UNDEFINED : value == "1" ? TRUE : FALSE);
+}
+
+
+void nts::Core::simulate()
+{
+    for (auto &component : _components) {
+        component.second->simulate(_tick);
+    }
+}
+
 void nts::Core::process(const std::string input)
 {
     if (input == "display")
         dump();
+    else if (input == "simulate")
+        simulate();
+    else if (input.find("=") != std::string::npos)
+        editValueViaInput(input);
     else
         std::cerr << "Error: invalid command" << std::endl;
+}
+
+void nts::Core::getInputAndOutputToDisplay()
+{
+    for (auto &component : _components) {
+        AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
+        if (comp->getType() == IComponent::INPUT)
+            _input.emplace_back(comp->getName(), comp->getPinValue(1) ? "1" : "0");
+        if (comp->getType() == IComponent::OUTPUT)
+            _output.emplace_back(comp->getName(), comp->getPinValue(1) ? "1" : "0");
+        if (comp->getType() == IComponent::CLOCK)
+            _input.emplace_back(comp->getName(), comp->getPinValue(1) ? "1" : "0");
+    }
 }
 
 void nts::Core::addComponents(Parser *parser)
@@ -60,14 +104,19 @@ void nts::Core::addComponents(Parser *parser)
             _components.insert(std::make_pair(chipset.second, std::move(component)));
         }
     }
-    for (auto &chipset :  parser->_chipsets) {
-        if (chipset.first == "input") {
-            _input.emplace_back(chipset.second, "0");
-        }
-        if (chipset.first == "output") {
-            _output.emplace_back(chipset.second, "0");
+    getInputAndOutputToDisplay();
+}
 
-        }
+void nts::Core::addLinks(Parser *parser)
+{
+    for (auto &link : parser->_links) {
+        const auto &[name1, pin1] = link.first;
+        const auto &[name2, pin2] = link.second;
+
+        if (_components.find(name1) == _components.end() || _components.find(name2) == _components.end())
+            throw Core::CoreError("Error: invalid link");
+        _components[name1]->setLink(pin1, *_components[name2], pin2);
+        _components[name2]->setLink(pin2, *_components[name1], pin1);
     }
 }
 
@@ -99,10 +148,9 @@ int nts::Core::run(const char *file)
     }
     if (getAllArgs(parser, file) == 84)
         return 84;
-    //addComponents(parser->_chipsets, parser->_links);
-    for (auto &link : parser->_links) {
-        std::cout << link.first << " " << link.second << std::endl;
-    }
+    addComponents(parser);
+    addLinks(parser);
+    loop();
     return 0;
 }
 
