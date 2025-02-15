@@ -36,6 +36,24 @@ int nts::Core::getAllArgs(Parser *parser, const std::string &file)
     return 0;
 }
 
+volatile std::sig_atomic_t stopLoop = 0;
+
+void signalHandler(int)
+{
+    stopLoop = 1;
+}
+
+void nts::Core::loopEmulate()
+{
+    std::signal(SIGINT, signalHandler);
+
+    while (!stopLoop) {
+        simulate();
+        dump();
+    }
+}
+
+
 void nts::Core::exit()
 {
     std::cout << "exit" << std::endl;
@@ -46,7 +64,7 @@ void nts::Core::editValueViaInput(const std::string& input)
 {
     std::string name;
     std::string value;
-    std::size_t pos = input.find("=");
+    std::size_t pos = input.find('=');
 
     if (pos == std::string::npos)
         throw Core::CoreError("Error: invalid input");
@@ -64,8 +82,11 @@ void nts::Core::editValueViaInput(const std::string& input)
 void nts::Core::simulate()
 {
     for (auto &component : _components) {
-        component.second->simulate(_tick);
+        AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
+        comp->simulate(_tick);
     }
+    _tick++;
+    getInputAndOutputToDisplay();
 }
 
 void nts::Core::process(const std::string input)
@@ -74,22 +95,26 @@ void nts::Core::process(const std::string input)
         dump();
     else if (input == "simulate")
         simulate();
-    else if (input.find("=") != std::string::npos)
+    else if (input.find('=') != std::string::npos)
         editValueViaInput(input);
+    else if (input == "loop")
+        loopEmulate();
     else
         std::cerr << "Error: invalid command" << std::endl;
 }
 
 void nts::Core::getInputAndOutputToDisplay()
 {
+    _output.clear();
+    _input.clear();
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         if (comp->getType() == IComponent::INPUT)
-            _input.emplace_back(comp->getName(), comp->getPinValue(1) ? "1" : "0");
+            _input.emplace_back(comp->getName(), comp->getPinValue(1) == TRUE ? "1" : comp->getPinValue(1) == FALSE ? "0" : "U");
         if (comp->getType() == IComponent::OUTPUT)
-            _output.emplace_back(comp->getName(), comp->getPinValue(1) ? "1" : "0");
+            _output.emplace_back(comp->getName(), comp->getPinValue(1) == TRUE ? "1" : comp->getPinValue(1) == FALSE ? "0" : "U");
         if (comp->getType() == IComponent::CLOCK)
-            _input.emplace_back(comp->getName(), comp->getPinValue(1) ? "1" : "0");
+            _input.emplace_back(comp->getName(), comp->getPinValue(1) == TRUE ? "1" : comp->getPinValue(1) == FALSE ? "0" : "U");
     }
 }
 

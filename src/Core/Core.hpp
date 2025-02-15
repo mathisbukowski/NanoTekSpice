@@ -42,6 +42,7 @@ namespace nts {
         void addComponents(Parser *parser);
         void addLinks(Parser *parser);
         void editValueViaInput(const std::string &input);
+        void loopEmulate();
 
     private:
         std::vector<std::pair<std::string, std::string>> _output;

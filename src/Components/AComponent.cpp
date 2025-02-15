@@ -13,6 +13,8 @@ nts::AComponent::AComponent(const std::string& name, ComponentType type)
 {
     _name = name;
     _type = type;
+    for (std::size_t i = 1; i <= _pins.size(); i++)
+        _pins[i] = UNDEFINED;
 }
 
 void nts::AComponent::setLink(std::size_t pin, IComponent &other, std::size_t otherPin)
