@@ -15,8 +15,8 @@ namespace nts {
     public:
         OutputComponent(std::string name);
         ~OutputComponent() = default;
-    private:
-        nts::Tristate compute(std::size_t pin) override;
+        Tristate compute(std::size_t pin) override;
+        void simulate(std::size_t tick) override;
     };
 };
 

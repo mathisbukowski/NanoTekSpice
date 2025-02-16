@@ -7,12 +7,28 @@
 
 #include "OrComponent.hpp"
 
-nts::OrComponent::OrComponent(std::string name) : AComponent(name, nts::IComponent::ComponentType::OR)
+nts::OrComponent::OrComponent(std::string name) : AComponent(name, OR)
 {
+    _pins[1] = UNDEFINED;
+    _pins[2] = UNDEFINED;
+    _pins[3] = UNDEFINED;
 }
 
 nts::Tristate nts::OrComponent::compute(std::size_t pin)
 {
-    (void)pin;
-    return nts::UNDEFINED;
+    if (pin == 3) {
+        Tristate a = _pins[1];
+        Tristate b = _pins[2];
+
+        if (a == TRUE || b == TRUE)
+            return TRUE;
+        if (a == FALSE && b == FALSE)
+            return FALSE;
+        return UNDEFINED;
+    }
+    return UNDEFINED;
+}
+void nts::OrComponent::simulate(std::size_t tick)
+{
+    (void)tick;
 }

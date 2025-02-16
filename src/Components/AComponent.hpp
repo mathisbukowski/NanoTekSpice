@@ -9,36 +9,30 @@
 #define NANOTEKSPICE_COMPONENT_HPP
 
 #include "../../include/NanoTekSpice.hpp"
-#include <vector>
+#include <unordered_map>
 
 namespace nts {
     class AComponent : public IComponent {
     public:
-        AComponent(std::string name, nts::IComponent::ComponentType type);
-        void simulate(std::size_t tick) override;
-        nts::Tristate compute(std::size_t pin) override;
-        void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
-        void dump() const;
+        AComponent(const std::string& name, ComponentType type);
+        virtual ~AComponent() = default;
+
+        void setLink(std::size_t pin, IComponent &other, std::size_t otherPin) override;
+        void setPinValue(std::size_t pin, Tristate value);
+        Tristate getPinValue(std::size_t pin) const;
+
         std::string getName() const;
-        void setName(std::string name);
-        nts::IComponent::ComponentType getType() const;
-        std::vector<std::pair<std::string, std::string>> getPins() const;
-        std::size_t getTick() const;
-        void setPinValue(const std::string& pin, const std::string& value);
-        std::string getPinValue(const std::string& pin) const;
-        void setPin(const std::string& pin, const std::string& value);
-        void setLink(const std::string& pin, const std::string& value);
-        void setInput(const std::string& pin, const std::string& value);
-        void setOutput(const std::string& pin, const std::string& value);
+        void setName(const std::string& name);
+        ComponentType getType() const;
+
+        virtual void simulate(std::size_t tick) override = 0;
+        virtual Tristate compute(std::size_t pin) override = 0;
 
     protected:
         std::string _name;
-        const nts::IComponent::ComponentType _type;
-        std::size_t _tick;
-        std::vector<std::pair<std::string, std::string>> _pins;
-        std::vector<std::pair<std::string, std::string>> _links;
-        std::vector<std::pair<std::string, std::string>> _input;
-        std::vector<std::pair<std::string, std::string>> _output;
+        ComponentType _type;
+        std::unordered_map<std::size_t, Tristate> _pins;
+        std::unordered_map<std::size_t, std::pair<IComponent*, std::size_t>> _links;
     };
 };
 

@@ -9,41 +9,27 @@
 
 #include <utility>
 
-nts::AComponent::AComponent(std::string name, nts::IComponent::ComponentType type) : _type(type)
+nts::AComponent::AComponent(const std::string& name, ComponentType type)
 {
-    _name = std::move(name);
-    _tick = 0;
+    _name = name;
+    _type = type;
+    for (std::size_t i = 1; i <= _pins.size(); i++)
+        _pins[i] = UNDEFINED;
 }
 
-void nts::AComponent::simulate(std::size_t tick)
+void nts::AComponent::setLink(std::size_t pin, IComponent &other, std::size_t otherPin)
 {
-    _tick = tick;
+    _links[pin] = {&other, otherPin};
 }
 
-nts::Tristate nts::AComponent::compute(std::size_t pin)
+void nts::AComponent::setPinValue(std::size_t pin, Tristate value)
 {
-    (void)pin;
-    return nts::UNDEFINED;
+    _pins[pin] = value;
 }
 
-void nts::AComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
+nts::Tristate nts::AComponent::getPinValue(std::size_t pin) const
 {
-    (void)pin;
-    (void)other;
-    (void)otherPin;
-}
-
-void nts::AComponent::dump() const
-{
-    std::cout << "tick: " << _tick << std::endl;
-    std::cout << "input(s):" << std::endl;
-    for (auto &p : _input) {
-        std::cout <<  p.first << ": " << p.second << std::endl;
-    }
-    std::cout << "output(s):" << std::endl;
-    for (auto &p : _output) {
-        std::cout <<  p.first << ": " << p.second << std::endl;
-    }
+    return _pins.at(pin);
 }
 
 std::string nts::AComponent::getName() const
@@ -51,62 +37,12 @@ std::string nts::AComponent::getName() const
     return _name;
 }
 
-void nts::AComponent::setName(std::string name)
-{
-    _name = std::move(name);
-}
-
 nts::IComponent::ComponentType nts::AComponent::getType() const
 {
     return _type;
 }
 
-std::vector<std::pair<std::string, std::string>> nts::AComponent::getPins() const
+void nts::AComponent::setName(const std::string& name)
 {
-    return _pins;
-}
-
-std::size_t nts::AComponent::getTick() const
-{
-    return _tick;
-}
-
-void nts::AComponent::setPinValue(const std::string& pin, const std::string& value)
-{
-    for (auto &p : _pins) {
-        if (p.first == pin) {
-            p.second = value;
-            return;
-        }
-    }
-}
-
-std::string nts::AComponent::getPinValue(const std::string& pin) const
-{
-    for (auto &p : _pins) {
-        if (p.first == pin) {
-            return p.second;
-        }
-    }
-    return "";
-}
-
-void nts::AComponent::setPin(const std::string& pin, const std::string& value)
-{
-    _pins.emplace_back(pin, value);
-}
-
-void nts::AComponent::setLink(const std::string& pin, const std::string& value)
-{
-    _links.emplace_back(pin, value);
-}
-
-void nts::AComponent::setInput(const std::string& pin, const std::string& value)
-{
-    _input.emplace_back(pin, value);
-}
-
-void nts::AComponent::setOutput(const std::string& pin, const std::string& value)
-{
-    _output.emplace_back(pin, value);
+    _name = name;
 }
