@@ -41,8 +41,11 @@ namespace nts {
         std::map<std::string, Tristate> getOutputs();
         std::map<std::string, Tristate> getInputs();
         std::string valueToString(Tristate &value);
+        void setPendingInput(const std::string& name, Tristate value);
+        void applyPendingInputs();
 
     private:
+        std::map<std::string, Tristate> _pendingInputs;
         std::size_t _tick;
         std::map<std::string, std::unique_ptr<IComponent>> _components;
         };

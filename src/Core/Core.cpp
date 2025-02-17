@@ -65,6 +65,7 @@ void nts::Core::editValueViaInput(const std::string& input)
     std::string name;
     std::string value;
     std::size_t pos = input.find('=');
+    Tristate tristateValue;
 
     if (pos == std::string::npos)
         throw CoreError("Error: invalid input");
@@ -74,13 +75,27 @@ void nts::Core::editValueViaInput(const std::string& input)
         throw CoreError("Error: invalid value");
     if (_components.find(name) == _components.end())
         throw CoreError("Error: invalid input");
-    AComponent *comp = dynamic_cast<AComponent *>(_components[name].get());
-    comp->setPinValue(1, value == "U" ? UNDEFINED : value == "1" ? TRUE : FALSE);
+    tristateValue = value == "U" ? UNDEFINED : value == "1" ? TRUE : FALSE;
+    setPendingInput(name, tristateValue);
 }
 
+void nts::Core::setPendingInput(const std::string& name, Tristate value)
+{
+    _pendingInputs[name] = value;
+}
+
+void nts::Core::applyPendingInputs()
+{
+    for (const auto& [name, value] : _pendingInputs) {
+        AComponent *comp = dynamic_cast<AComponent *>(_components[name].get());
+        comp->setPinValue(1, value);
+    }
+    _pendingInputs.clear();
+}
 
 void nts::Core::simulate()
 {
+    applyPendingInputs();
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         comp->simulate(_tick);
