@@ -26,6 +26,8 @@ namespace nts {
           {
                 INPUT,
                 OUTPUT,
+                TRUECOMPONENT,
+                FALSECOMPONENT,
                 CLOCK,
                 AND,
                 NAND,
