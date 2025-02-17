@@ -31,22 +31,18 @@ namespace nts {
         static void exit();
         int getAllArgs(Parser *parser, const std::string &file);
         void process(std::string input);
-        void getInputAndOutputToDisplay();
         void dump();
         void simulate();
-        std::vector<std::pair<std::string, std::string>> getOutput();
-        std::vector<std::pair<std::string, std::string>> getInput();
         std::size_t getTick() const;
-        void setOutput(const std::string& pin, const std::string& value);
-        void setInput(const std::string& pin, const std::string& value);
         void addComponents(Parser *parser);
         void addLinks(Parser *parser);
         void editValueViaInput(const std::string &input);
         void loopEmulate();
+        std::map<std::string, Tristate> getOutputs();
+        std::map<std::string, Tristate> getInputs();
+        std::string valueToString(Tristate &value);
 
     private:
-        std::vector<std::pair<std::string, std::string>> _output;
-        std::vector<std::pair<std::string, std::string>> _input;
         std::size_t _tick;
         std::map<std::string, std::unique_ptr<IComponent>> _components;
         };
