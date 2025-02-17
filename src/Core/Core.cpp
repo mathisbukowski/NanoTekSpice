@@ -86,7 +86,6 @@ void nts::Core::simulate()
         comp->simulate(_tick);
     }
     _tick++;
-    getInputAndOutputToDisplay();
 }
 
 void nts::Core::process(const std::string input)
@@ -105,19 +104,30 @@ void nts::Core::process(const std::string input)
     }
 }
 
-void nts::Core::getInputAndOutputToDisplay()
+std::map<std::string, nts::Tristate> nts::Core::getInputs()
 {
-    _output.clear();
-    _input.clear();
-    for (auto &component : _components) {
-        AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
+    std::map<std::string, Tristate> inputs;
+
+    for (auto &[name, component] : _components) {
+        AComponent *comp = dynamic_cast<AComponent *>(component.get());
         if (comp->getType() == IComponent::INPUT)
-            _input.emplace_back(comp->getName(), comp->getPinValue(1) == TRUE ? "1" : comp->getPinValue(1) == FALSE ? "0" : "U");
-        if (comp->getType() == IComponent::OUTPUT)
-            _output.emplace_back(comp->getName(), comp->getPinValue(1) == TRUE ? "1" : comp->getPinValue(1) == FALSE ? "0" : "U");
+            inputs[name] = comp->compute(1);
         if (comp->getType() == IComponent::CLOCK)
-            _input.emplace_back(comp->getName(), comp->getPinValue(1) == TRUE ? "1" : comp->getPinValue(1) == FALSE ? "0" : "U");
+            inputs[name] = comp->compute(1);
     }
+    return inputs;
+}
+
+std::map<std::string, nts::Tristate> nts::Core::getOutputs()
+{
+    std::map<std::string, Tristate> outputs;
+
+    for (auto &[name, component] : _components) {
+        AComponent *comp = dynamic_cast<AComponent *>(component.get());
+        if (comp->getType() == IComponent::OUTPUT)
+            outputs[name] = comp->compute(1);
+    }
+    return outputs;
 }
 
 void nts::Core::addComponents(Parser *parser)
@@ -131,7 +141,6 @@ void nts::Core::addComponents(Parser *parser)
             _components.insert(std::make_pair(chipset.second, std::move(component)));
         }
     }
-    getInputAndOutputToDisplay();
 }
 
 void nts::Core::addLinks(Parser *parser)
@@ -186,43 +195,29 @@ int nts::Core::run(const char *file)
     return 0;
 }
 
-std::vector<std::pair<std::string, std::string>> nts::Core::getInput()
+std::string nts::Core::valueToString(Tristate &value)
 {
-    return _input;
-}
-
-std::vector<std::pair<std::string, std::string>> nts::Core::getOutput()
-{
-    return _output;
+    if (value == TRUE)
+        return "1";
+    if (value == FALSE)
+        return "0";
+    return "U";
 }
 
 void nts::Core::dump()
 {
-    std::vector<std::pair<std::string, std::string>> input = getInput();
-    std::vector<std::pair<std::string, std::string>> output = getOutput();
-
     std::cout << "tick: " << getTick() << std::endl;
     std::cout << "input(s):" << std::endl;
-    for (auto &p : input) {
-        std::cout << "  " <<  p.first << ": " << p.second << std::endl;
+    for (auto &p : getInputs()) {
+        std::cout << "  " <<  p.first << ": " << valueToString(p.second) << std::endl;
     }
     std::cout << "output(s):" << std::endl;
-    for (auto &p : output) {
-        std::cout << "  " <<  p.first << ": " << p.second << std::endl;
+    for (auto &p : getOutputs()) {
+        std::cout << "  " <<  p.first << ": " << valueToString(p.second)  << std::endl;
     }
 }
 
 std::size_t nts::Core::getTick() const
 {
     return _tick;
-}
-
-void nts::Core::setInput(const std::string& pin, const std::string& value)
-{
-    _input.emplace_back(pin, value);
-}
-
-void nts::Core::setOutput(const std::string& pin, const std::string& value)
-{
-    _output.emplace_back(pin, value);
 }
