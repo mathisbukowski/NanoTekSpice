@@ -14,12 +14,16 @@
 #include "Components/NotComponent.hpp"
 #include "Components/OrComponent.hpp"
 #include "Components/OutputComponent.hpp"
+#include "Components/TrueComponent.hpp"
+#include "Components/FalseComponent.hpp"
 
 nts::Factory::Factory()
 {
     componentMap = {
             {"and", []() { return std::make_unique<nts::AndComponent>("and"); }},
             {"clock", []() { return std::make_unique<nts::ClockComponent>("clock"); }},
+            {"true", []() { return std::make_unique<nts::TrueComponent>("true"); }},
+            {"false", []() { return std::make_unique<nts::FalseComponent>("false"); }},
             {"input", []() { return std::make_unique<nts::InputComponent>("input"); }},
             {"not", []() { return std::make_unique<nts::NotComponent>("not"); }},
             {"or", []() { return std::make_unique<nts::OrComponent>("or"); }},
