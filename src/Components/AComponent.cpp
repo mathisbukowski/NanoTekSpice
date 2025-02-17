@@ -46,3 +46,11 @@ void nts::AComponent::setName(const std::string& name)
 {
     _name = name;
 }
+
+
+nts::Tristate nts::AComponent::getLink(std::size_t pin) const
+{
+    if (_links.find(pin) == _links.end())
+        return UNDEFINED;
+    return _links.at(pin).first->compute(_links.at(pin).second);
+}
