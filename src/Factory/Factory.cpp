@@ -16,6 +16,7 @@
 #include "Components/OutputComponent.hpp"
 #include "Components/TrueComponent.hpp"
 #include "Components/FalseComponent.hpp"
+#include "Components/XorComponent.hpp"
 
 nts::Factory::Factory()
 {
@@ -28,6 +29,7 @@ nts::Factory::Factory()
             {"not", []() { return std::make_unique<nts::NotComponent>("not"); }},
             {"or", []() { return std::make_unique<nts::OrComponent>("or"); }},
             {"output", []() { return std::make_unique<nts::OutputComponent>("output"); }},
+            {"xor", []() { return std::make_unique<nts::XorComponent>("xor"); }},
     };
 }
 

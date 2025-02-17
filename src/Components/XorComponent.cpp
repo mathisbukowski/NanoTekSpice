@@ -2,33 +2,34 @@
 ** EPITECH PROJECT, 2024
 ** nanotekspice
 ** File description:
-** OrComponent.cpp
+** XorComponent.cpp
 */
 
-#include "OrComponent.hpp"
+#include "XorComponent.hpp"
 
-nts::OrComponent::OrComponent(std::string name) : AComponent(name, OR)
+nts::XorComponent::XorComponent(std::string name) : AComponent(name, XOR)
 {
     _pins[1] = UNDEFINED;
     _pins[2] = UNDEFINED;
     _pins[3] = UNDEFINED;
 }
 
-nts::Tristate nts::OrComponent::compute(std::size_t pin)
+nts::Tristate nts::XorComponent::compute(std::size_t pin)
 {
     if (pin == 3) {
         Tristate a = getLink(1);
         Tristate b = getLink(2);
 
-        if (a == TRUE || b == TRUE)
+        if ((a == TRUE && b == FALSE) || (a == FALSE && b == TRUE))
             return TRUE;
-        if (a == FALSE && b == FALSE)
+        if ((a == TRUE && b == TRUE) || (a == FALSE && b == FALSE))
             return FALSE;
         return UNDEFINED;
     }
     return UNDEFINED;
 }
-void nts::OrComponent::simulate(std::size_t tick)
+
+void nts::XorComponent::simulate(std::size_t tick)
 {
     (void)tick;
 }
