@@ -42,11 +42,26 @@ jobs:
               echo "nanotekspice does not exist or is not executable."
               exit 1
           fi
+      
+      - name: "Create Input File"
+        run: |
+          cat <<EOF > build/input.nts
+          # Basic wire, direct link clock to output.
+          #
+          # CLOCK ---> OUTPUT
+
+          .chipsets:
+          clock cl
+          output out
+
+          .links:
+          cl:1 out:1
+          EOF
 
       - name: "Test Executable Program Launch"
         run: |
             echo "Testing execution of nanotekspice with arguments: $ARGS"
-            ./build/nanotekspice || exit 1
+            ./build/nanotekspice input.nts || exit 1
 
   push_to_mirror:
     runs-on: ubuntu-latest

@@ -22,9 +22,9 @@ nts::Tristate nts::ClockComponent::compute(std::size_t pin)
 void nts::ClockComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    if (_pins[1] == TRUE)
+    if (_pins[1] == TRUE && tick != 0)
         _pins[1] = FALSE;
-    else if (_pins[1] == FALSE)
+    else if (_pins[1] == FALSE && tick != 0)
         _pins[1] = TRUE;
 }
 

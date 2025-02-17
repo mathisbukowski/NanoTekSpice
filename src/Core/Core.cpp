@@ -91,16 +91,18 @@ void nts::Core::simulate()
 
 void nts::Core::process(const std::string input)
 {
-    if (input == "display")
-        dump();
-    else if (input == "simulate")
-        simulate();
-    else if (input.find('=') != std::string::npos)
-        editValueViaInput(input);
-    else if (input == "loop")
-        loopEmulate();
-    else
-        std::cerr << "Error: invalid command" << std::endl;
+    try {
+        if (input == "display")
+            dump();
+        else if (input == "simulate")
+            simulate();
+        else if (input.find('=') != std::string::npos)
+            editValueViaInput(input);
+        else if (input == "loop")
+            loopEmulate();
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void nts::Core::getInputAndOutputToDisplay()
