@@ -28,7 +28,7 @@ int nts::Core::getAllArgs(Parser *parser, const std::string &file)
         parser->getChipsets();
         parser->getLinks();
         if (!parser->checkContentOfInputFile())
-            throw Parser::ParserError("Error: invalid file content");
+            return 84;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;
@@ -67,7 +67,7 @@ void nts::Core::editValueViaInput(const std::string& input)
     std::size_t pos = input.find('=');
 
     if (pos == std::string::npos)
-        throw Core::CoreError("Error: invalid input");
+        throw CoreError("Error: invalid input");
     name = input.substr(0, pos);
     value = input.substr(pos + 1);
     if (value != "0" && value != "1" && value != "U")
@@ -176,7 +176,12 @@ int nts::Core::run(const char *file)
     if (getAllArgs(parser, file) == 84)
         return 84;
     addComponents(parser);
-    addLinks(parser);
+    try {
+        addLinks(parser);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
     loop();
     return 0;
 }
@@ -199,11 +204,11 @@ void nts::Core::dump()
     std::cout << "tick: " << getTick() << std::endl;
     std::cout << "input(s):" << std::endl;
     for (auto &p : input) {
-        std::cout <<  p.first << ": " << p.second << std::endl;
+        std::cout << "  " <<  p.first << ": " << p.second << std::endl;
     }
     std::cout << "output(s):" << std::endl;
     for (auto &p : output) {
-        std::cout <<  p.first << ": " << p.second << std::endl;
+        std::cout << "  " <<  p.first << ": " << p.second << std::endl;
     }
 }
 
