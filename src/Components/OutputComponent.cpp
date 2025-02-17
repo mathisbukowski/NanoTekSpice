@@ -14,11 +14,8 @@ nts::OutputComponent::OutputComponent(std::string name) : AComponent(name, OUTPU
 
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
-    if (pin == 1) {
-        if (_links.find(1) != _links.end())
-            return _links[1].first->compute(_links[1].second);
-        return UNDEFINED;
-    }
+    if (pin == 1)
+        return getLink(1);
     return UNDEFINED;
 }
 
