@@ -8,6 +8,7 @@
 #include "Factory.hpp"
 #include <memory>
 #include "NanoTekSpice.hpp"
+#include "Components/4001Component.hpp"
 #include "Components/AndComponent.hpp"
 #include "Components/ClockComponent.hpp"
 #include "Components/InputComponent.hpp"
@@ -30,6 +31,7 @@ nts::Factory::Factory()
             {"or", []() { return std::make_unique<nts::OrComponent>("or"); }},
             {"output", []() { return std::make_unique<nts::OutputComponent>("output"); }},
             {"xor", []() { return std::make_unique<nts::XorComponent>("xor"); }},
+            {"4001", []() { return std::make_unique<nts::Component4001>("4001"); }}
     };
 }
 

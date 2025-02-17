@@ -5,15 +5,21 @@
 ** 02
 */
 
-#ifndef 4001_HPP
-#define 4001_HPP
+#ifndef C4001_HPP
+#define C4001_HPP
 #include "AComponent.hpp"
 
+namespace nts {
+    class Component4001 : public AComponent {
+    public:
+        Component4001(std::string name);
+        ~Component4001() = default;
+        Tristate compute(std::size_t pin) override;
+        void simulate(std::size_t tick) override;
+        void getInputs(size_t *input1, size_t *input2, size_t pin);
+    };
+}
 
-class 4001Component : public nts::AComponent {
-
-};
 
 
-
-#endif //4001_HPP
+#endif //C4001_HPP
