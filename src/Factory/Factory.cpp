@@ -12,6 +12,7 @@
 #include "Components/Component4011.hpp"
 #include "Components/AndComponent.hpp"
 #include "Components/ClockComponent.hpp"
+#include "Components/Component4030.hpp"
 #include "Components/InputComponent.hpp"
 #include "Components/NotComponent.hpp"
 #include "Components/OrComponent.hpp"
@@ -33,7 +34,8 @@ nts::Factory::Factory()
             {"output", []() { return std::make_unique<OutputComponent>("output"); }},
             {"xor", []() { return std::make_unique<XorComponent>("xor"); }},
             {"4001", []() { return std::make_unique<Component4001>("4001"); }},
-            {"4011", [](){ return std::make_unique<Component4011>("4011"); }}
+            {"4011", [](){ return std::make_unique<Component4011>("4011"); }},
+            {"4030", [](){ return std::make_unique<Component4030>("4030"); }}
     };
 }
 
