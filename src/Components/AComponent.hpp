@@ -29,6 +29,7 @@ namespace nts {
         virtual void simulate(std::size_t tick) override = 0;
         virtual Tristate compute(std::size_t pin) override = 0;
         void getInputs(size_t *input1, size_t *input2, size_t pin);
+        void getInput(size_t *input, size_t pin);
 
     protected:
         std::string _name;

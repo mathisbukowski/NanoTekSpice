@@ -76,3 +76,27 @@ void nts::AComponent::getInputs(size_t *input1, size_t *input2, size_t pin)
         break;
     }
 }
+
+void nts::AComponent::getInput(size_t* input, size_t pin)
+{
+    switch (pin) {
+        case 2:
+            *input = 1;
+            break;
+        case 4:
+            *input = 3;
+            break;
+        case 6:
+            *input = 5;
+            break;
+        case 8:
+            *input = 9;
+            break;
+        case 10:
+            *input = 11;
+            break;
+        case 12:
+            *input = 13;
+            break;
+    }
+}
