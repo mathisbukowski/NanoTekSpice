@@ -54,3 +54,49 @@ nts::Tristate nts::AComponent::getLink(std::size_t pin) const
         return UNDEFINED;
     return _links.at(pin).first->compute(_links.at(pin).second);
 }
+
+void nts::AComponent::getInputs(size_t *input1, size_t *input2, size_t pin)
+{
+    switch (pin) {
+    case 3:
+        *input1 = 1;
+        *input2 = 2;
+        break;
+    case 4:
+        *input1 = 5;
+        *input2 = 6;
+        break;
+    case 10:
+        *input1 = 8;
+        *input2 = 9;
+        break;
+    case 11:
+        *input1 = 12;
+        *input2 = 13;
+        break;
+    }
+}
+
+void nts::AComponent::getInput(size_t* input, size_t pin)
+{
+    switch (pin) {
+        case 2:
+            *input = 1;
+            break;
+        case 4:
+            *input = 3;
+            break;
+        case 6:
+            *input = 5;
+            break;
+        case 8:
+            *input = 9;
+            break;
+        case 10:
+            *input = 11;
+            break;
+        case 12:
+            *input = 13;
+            break;
+    }
+}
