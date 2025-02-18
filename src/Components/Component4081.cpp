@@ -5,16 +5,16 @@
 ** 02
 */
 
-#include "Component4071.hpp"
+#include "Component4081.hpp"
 
 
-nts::Component4071::Component4071(std::string name) : AComponent(name, C4071)
+nts::Component4081::Component4081(std::string name) : AComponent(name, C4081)
 {
     for (size_t i = 0; i < 14; i++)
         _pins[i] = UNDEFINED;
 }
 
-nts::Tristate nts::Component4071::compute(std::size_t pin)
+nts::Tristate nts::Component4081::compute(std::size_t pin)
 {
     std::size_t input1, input2;
     Tristate a, b;
@@ -25,14 +25,14 @@ nts::Tristate nts::Component4071::compute(std::size_t pin)
         b = getLink(input2);
         if (a == UNDEFINED || b == UNDEFINED)
             return UNDEFINED;
-        if (a == FALSE && b == FALSE)
-            return FALSE;
-        return TRUE;
+        if (a == TRUE && b == TRUE)
+            return TRUE;
+        return FALSE;
     }
     return UNDEFINED;
 }
 
-void nts::Component4071::simulate(std::size_t tick)
+void nts::Component4081::simulate(std::size_t tick)
 {
     (void)tick;
     _pins[3] = compute(3);
@@ -40,3 +40,4 @@ void nts::Component4071::simulate(std::size_t tick)
     _pins[10] = compute(10);
     _pins[11] = compute(11);
 }
+

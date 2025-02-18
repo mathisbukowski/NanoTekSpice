@@ -39,7 +39,8 @@ nts::Factory::Factory()
             {"4011", [](){ return std::make_unique<Component4011>("4011"); }},
             {"4030", [](){ return std::make_unique<Component4030>("4030"); }},
             {"4069", [](){ return std::make_unique<Component4069>("4069"); }},
-            {"4071", [](){ return std::make_unique<Component4071>("4071"); }}
+            {"4071", [](){ return std::make_unique<Component4071>("4071"); }},
+            {"4081", [](){ return std::make_unique<Component4071>("4081"); }}
     };
 }
 
