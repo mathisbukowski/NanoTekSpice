@@ -23,6 +23,7 @@
 #include "Components/TrueComponent.hpp"
 #include "Components/FalseComponent.hpp"
 #include "Components/XorComponent.hpp"
+#include "Components/Component4008.hpp"
 
 nts::Factory::Factory()
 {
@@ -37,6 +38,7 @@ nts::Factory::Factory()
             {"output", []() { return std::make_unique<OutputComponent>("output"); }},
             {"xor", []() { return std::make_unique<XorComponent>("xor"); }},
             {"4001", []() { return std::make_unique<Component4001>("4001"); }},
+            {"4008", []() { return std::make_unique<Component4008>("4008"); }},
             {"4011", [](){ return std::make_unique<Component4011>("4011"); }},
             {"4030", [](){ return std::make_unique<Component4030>("4030"); }},
             {"4069", [](){ return std::make_unique<Component4069>("4069"); }},
