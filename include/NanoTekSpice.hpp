@@ -36,6 +36,7 @@ namespace nts {
                 OR,
                 XOR,
                 C4001,
+                C4008,
                 C4011,
                 C4030,
                 C4069,
