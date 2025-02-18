@@ -114,9 +114,9 @@ void nts::Core::process(const std::string input)
             editValueViaInput(input);
         else if (input == "loop")
             loopEmulate();
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
-        }
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 std::map<std::string, nts::Tristate> nts::Core::getInputs()

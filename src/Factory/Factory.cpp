@@ -10,7 +10,6 @@
 #include "NanoTekSpice.hpp"
 #include "Components/Component4001.hpp"
 #include "Components/Component4011.hpp"
-#include "Components/Component4514.hpp"
 #include "Components/AndComponent.hpp"
 #include "Components/ClockComponent.hpp"
 #include "Components/Component4030.hpp"
@@ -44,8 +43,7 @@ nts::Factory::Factory()
             {"4030", [](){ return std::make_unique<Component4030>("4030"); }},
             {"4069", [](){ return std::make_unique<Component4069>("4069"); }},
             {"4071", [](){ return std::make_unique<Component4071>("4071"); }},
-            {"4081", [](){ return std::make_unique<Component4081>("4081"); }},
-            {"4514", [](){ return std::make_unique<Component4514>("4514"); }}
+            {"4081", [](){ return std::make_unique<Component4081>("4081"); }}
     };
 }
 
