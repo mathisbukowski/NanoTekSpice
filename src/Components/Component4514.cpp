@@ -51,6 +51,9 @@ size_t nts::Component4514::convertBytesToDecimal(std::string bytes)
 nts::Tristate nts::Component4514::compute(std::size_t pin)
 {
     Tristate inhibit, strobe;
+    std::string binary = "";
+    Tristate a, b, c, d;
+
     if (pin < 1 || pin > 24 || pin == 12 || pin == 24)
         return UNDEFINED;
     if (pin == 1 || pin == 2 || pin == 3 || pin == 21 || pin == 22 || pin == 23)
@@ -60,19 +63,18 @@ nts::Tristate nts::Component4514::compute(std::size_t pin)
         return FALSE;
     strobe = getLink(1);
     if (strobe == TRUE)
-        return _pins[pin];
-    Tristate in0 = getLink(2);
-    Tristate in1 = getLink(3);
-    Tristate in2 = getLink(21);
-    Tristate in3 = getLink(22);
+        return getLink(pin);
+    a = getLink(2);
+    b = getLink(3);
+    c = getLink(21);
+    d = getLink(22);
 
-    if (in0 == UNDEFINED || in1 == UNDEFINED || in2 == UNDEFINED || in3 == UNDEFINED)
+    if (a == UNDEFINED || b == UNDEFINED || c == UNDEFINED || d == UNDEFINED)
         return UNDEFINED;
-    std::string binary = "";
-    binary += (in3 == TRUE) ? "1" : "0";
-    binary += (in2 == TRUE) ? "1" : "0";
-    binary += (in1 == TRUE) ? "1" : "0";
-    binary += (in0 == TRUE) ? "1" : "0";
+    binary += (d == TRUE) ? "1" : "0";
+    binary += (c == TRUE) ? "1" : "0";
+    binary += (b == TRUE) ? "1" : "0";
+    binary += (a == TRUE) ? "1" : "0";
 
     size_t activeOutput = convertBytesToDecimal(binary);
     for (auto &[output, outputPin] : _outputPinMap) {
