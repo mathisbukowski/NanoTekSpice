@@ -31,3 +31,12 @@ nts::Tristate nts::Component4011::compute(std::size_t pin)
     }
     return UNDEFINED;
 }
+
+void nts::Component4011::simulate(std::size_t tick)
+{
+    (void)tick;
+    _pins[3] = compute(3);
+    _pins[4] = compute(4);
+    _pins[10] = compute(10);
+    _pins[11] = compute(11);
+}
