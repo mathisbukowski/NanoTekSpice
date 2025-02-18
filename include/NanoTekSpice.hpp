@@ -40,7 +40,8 @@ namespace nts {
                 C4030,
                 C4069,
                 C4071,
-                C4081
+                C4081,
+                C4514
           };
           virtual ~IComponent() = default;
           virtual void simulate(std::size_t tick) = 0;
