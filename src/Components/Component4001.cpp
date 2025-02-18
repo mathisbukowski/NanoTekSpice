@@ -5,34 +5,12 @@
 ** 02
 */
 
-#include "4001Component.hpp"
+#include "Component4001.hpp"
 
 nts::Component4001::Component4001(std::string name): AComponent(name, C4001)
 {
     for (size_t i = 0; i < 14; i++)
         _pins[i] = UNDEFINED;
-}
-
-void nts::Component4001::getInputs(size_t *input1, size_t *input2, size_t pin)
-{
-    switch (pin) {
-        case 3:
-            *input1 = 1;
-            *input2 = 2;
-        break;
-        case 4:
-            *input1 = 5;
-            *input2 = 6;
-        break;
-        case 10:
-            *input1 = 8;
-            *input2 = 9;
-        break;
-        case 11:
-            *input1 = 12;
-            *input2 = 13;
-        break;
-    }
 }
 
 nts::Tristate nts::Component4001::compute(std::size_t pin)

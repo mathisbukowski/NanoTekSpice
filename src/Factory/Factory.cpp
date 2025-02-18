@@ -8,7 +8,8 @@
 #include "Factory.hpp"
 #include <memory>
 #include "NanoTekSpice.hpp"
-#include "Components/4001Component.hpp"
+#include "Components/Component4001.hpp"
+#include "Components/Component4011.hpp"
 #include "Components/AndComponent.hpp"
 #include "Components/ClockComponent.hpp"
 #include "Components/InputComponent.hpp"
@@ -22,16 +23,17 @@
 nts::Factory::Factory()
 {
     componentMap = {
-            {"and", []() { return std::make_unique<nts::AndComponent>("and"); }},
-            {"clock", []() { return std::make_unique<nts::ClockComponent>("clock"); }},
-            {"true", []() { return std::make_unique<nts::TrueComponent>("true"); }},
-            {"false", []() { return std::make_unique<nts::FalseComponent>("false"); }},
-            {"input", []() { return std::make_unique<nts::InputComponent>("input"); }},
-            {"not", []() { return std::make_unique<nts::NotComponent>("not"); }},
-            {"or", []() { return std::make_unique<nts::OrComponent>("or"); }},
-            {"output", []() { return std::make_unique<nts::OutputComponent>("output"); }},
-            {"xor", []() { return std::make_unique<nts::XorComponent>("xor"); }},
-            {"4001", []() { return std::make_unique<nts::Component4001>("4001"); }}
+            {"and", []() { return std::make_unique<AndComponent>("and"); }},
+            {"clock", []() { return std::make_unique<ClockComponent>("clock"); }},
+            {"true", []() { return std::make_unique<TrueComponent>("true"); }},
+            {"false", []() { return std::make_unique<FalseComponent>("false"); }},
+            {"input", []() { return std::make_unique<InputComponent>("input"); }},
+            {"not", []() { return std::make_unique<NotComponent>("not"); }},
+            {"or", []() { return std::make_unique<OrComponent>("or"); }},
+            {"output", []() { return std::make_unique<OutputComponent>("output"); }},
+            {"xor", []() { return std::make_unique<XorComponent>("xor"); }},
+            {"4001", []() { return std::make_unique<Component4001>("4001"); }},
+            {"4011", [](){ return std::make_unique<Component4011>("4011"); }}
     };
 }
 

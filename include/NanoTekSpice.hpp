@@ -36,6 +36,7 @@ namespace nts {
                 OR,
                 XOR,
                 C4001,
+                C4011,
           };
           virtual ~IComponent() = default;
           virtual void simulate(std::size_t tick) = 0;
