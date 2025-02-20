@@ -10,6 +10,7 @@
 nts::ClockComponent::ClockComponent(std::string name) : AComponent(name, CLOCK)
 {
     _pins[1] = UNDEFINED;
+    _nextValue = FALSE;
 }
 
 nts::Tristate nts::ClockComponent::compute(std::size_t pin)
@@ -22,14 +23,13 @@ nts::Tristate nts::ClockComponent::compute(std::size_t pin)
 void nts::ClockComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    if (_pins[1] == TRUE && tick != 0)
+    if (_pins[1] == UNDEFINED)
         _pins[1] = FALSE;
-    else if (_pins[1] == FALSE && tick != 0)
-        _pins[1] = TRUE;
+    _pins[1] = _nextValue;
+    _nextValue = (_pins[1] == TRUE) ? FALSE : TRUE;
 }
-
 void nts::ClockComponent::setPinValue(Tristate value)
 {
-    std::cout << "Test" << std::endl;
     _pins[1] = value;
+    _nextValue = (value == TRUE) ? FALSE : TRUE;
 }
