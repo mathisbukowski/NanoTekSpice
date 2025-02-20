@@ -25,7 +25,7 @@ nts::Tristate nts::Component4011::compute(std::size_t pin)
         b = getLink(input2);
         if (a == UNDEFINED || b == UNDEFINED)
             return UNDEFINED;
-        if (a == FALSE && b == FALSE)
+        if (a == FALSE || b == FALSE)
             return TRUE;
         return FALSE;
     }
