@@ -31,4 +31,5 @@ nts::Tristate nts::OrComponent::compute(std::size_t pin)
 void nts::OrComponent::simulate(std::size_t tick)
 {
     (void)tick;
+    _pins[3] = compute(3);
 }
