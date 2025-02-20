@@ -26,8 +26,8 @@ nts::Tristate nts::Component4011::compute(std::size_t pin)
         if (a == UNDEFINED || b == UNDEFINED)
             return UNDEFINED;
         if (a == TRUE && b == TRUE)
-            return FALSE;
-        return TRUE;
+            return TRUE;
+        return FALSE;
     }
     return UNDEFINED;
 }
