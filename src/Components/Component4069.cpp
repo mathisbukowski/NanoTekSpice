@@ -19,7 +19,10 @@ nts::Tristate nts::Component4069::compute(std::size_t pin)
 
     if (pin == 2 || pin == 4 || pin == 6 || pin == 8 || pin == 10 || pin == 12) {
         getInput(&input1, pin);
-        return getLink(input1);
+        Tristate a = getLink(input1);
+        if (a == UNDEFINED)
+            return UNDEFINED;
+        return (a == TRUE) ? FALSE : TRUE;
     }
     return UNDEFINED;
 }
