@@ -95,10 +95,16 @@ void nts::Core::applyPendingInputs()
 
 void nts::Core::simulate()
 {
-    applyPendingInputs();
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
-        comp->simulate(_tick);
+        if (comp->getType() == IComponent::CLOCK) {
+            ClockComponent *clockComp = dynamic_cast<ClockComponent *>(comp);
+            clockComp->simulate(_tick);
+            applyPendingInputs();
+        } else {
+            applyPendingInputs();
+            comp->simulate(_tick);
+        }
     }
     _tick++;
 }
