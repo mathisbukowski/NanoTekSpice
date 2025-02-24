@@ -10,11 +10,12 @@
 nts::NotComponent::NotComponent(std::string name) : AComponent(name, NOT)
 {
     _pins[1] = UNDEFINED;
+    _pins[2] = UNDEFINED;
 }
 
 nts::Tristate nts::NotComponent::compute(std::size_t pin)
 {
-    if (pin == 3) {
+    if (pin == 2) {
         Tristate a = getLink(1);
 
         if (a == TRUE)
@@ -29,5 +30,5 @@ nts::Tristate nts::NotComponent::compute(std::size_t pin)
 void nts::NotComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[3] = compute(3);
+    _pins[2] = compute(2);
 }

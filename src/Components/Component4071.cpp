@@ -23,8 +23,12 @@ nts::Tristate nts::Component4071::compute(std::size_t pin)
         getInputs(&input1, &input2, pin);
         a = getLink(input1);
         b = getLink(input2);
-        if (a == UNDEFINED || b == UNDEFINED)
+        if (a == UNDEFINED && b == UNDEFINED)
             return UNDEFINED;
+        if ((a == UNDEFINED && b == FALSE) || (a == FALSE && b == UNDEFINED))
+            return UNDEFINED;
+        if ((a == UNDEFINED && b == TRUE) || (a == TRUE && b == UNDEFINED))
+            return TRUE;
         if (a == TRUE || b == TRUE)
             return TRUE;
         return FALSE;
