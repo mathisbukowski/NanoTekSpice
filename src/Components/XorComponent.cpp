@@ -20,11 +20,11 @@ nts::Tristate nts::XorComponent::compute(std::size_t pin)
         Tristate a = getLink(1);
         Tristate b = getLink(2);
 
+        if (a == UNDEFINED || b == UNDEFINED)
+            return UNDEFINED;
         if ((a == TRUE && b == FALSE) || (a == FALSE && b == TRUE))
             return TRUE;
-        if ((a == TRUE && b == TRUE) || (a == FALSE && b == FALSE))
-            return FALSE;
-        return UNDEFINED;
+        return FALSE;
     }
     return UNDEFINED;
 }
