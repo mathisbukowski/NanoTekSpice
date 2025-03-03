@@ -24,6 +24,7 @@
 #include "Components/FalseComponent.hpp"
 #include "Components/XorComponent.hpp"
 #include "Components/Component4008.hpp"
+#include "Components/LoggerComponent.hpp"
 
 nts::Factory::Factory()
 {
@@ -43,7 +44,8 @@ nts::Factory::Factory()
             {"4030", [](){ return std::make_unique<Component4030>("4030"); }},
             {"4069", [](){ return std::make_unique<Component4069>("4069"); }},
             {"4071", [](){ return std::make_unique<Component4071>("4071"); }},
-            {"4081", [](){ return std::make_unique<Component4081>("4081"); }}
+            {"4081", [](){ return std::make_unique<Component4081>("4081"); }},
+            {"logger", [](){ return std::make_unique<LoggerComponent>("Logger"); }},
     };
 }
 

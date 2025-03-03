@@ -9,6 +9,7 @@
 #define LOGGERCOMPONENT_HPP
 
 #include "AComponent.hpp"
+#include <fstream>
 
 namespace nts {
     class LoggerComponent : public AComponent {
@@ -17,6 +18,9 @@ namespace nts {
         ~LoggerComponent() = default;
         Tristate compute(std::size_t pin) override;
         void simulate(std::size_t tick) override;
+    private:
+        std::ofstream _logFile;
+        Tristate _previousClock;
     };
 }
 
