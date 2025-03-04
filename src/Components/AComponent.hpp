@@ -25,7 +25,7 @@ namespace nts {
         std::string getName() const;
         void setName(const std::string& name);
         ComponentType getType() const;
-
+        Tristate computeInput(size_t pin) const;
         virtual void simulate(std::size_t tick) override = 0;
         virtual Tristate compute(std::size_t pin) override = 0;
         void getInputs(size_t *input1, size_t *input2, size_t pin);

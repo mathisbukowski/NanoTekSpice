@@ -22,5 +22,5 @@ nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 void nts::OutputComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[1] = compute(1);
+    _pins[1] = computeInput(1);
 }

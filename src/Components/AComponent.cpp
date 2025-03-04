@@ -60,6 +60,17 @@ nts::Tristate nts::AComponent::getLink(std::size_t pin) const
     return UNDEFINED;
 }
 
+nts::Tristate nts::AComponent::computeInput(size_t pin) const
+{
+    if (_links.find(pin) == _links.end())
+        return UNDEFINED;
+
+    IComponent* linkedComponent = _links.at(pin).first;
+    std::size_t linkedPin = _links.at(pin).second;
+    return linkedComponent->compute(linkedPin);
+}
+
+
 void nts::AComponent::getInputs(size_t *input1, size_t *input2, size_t pin)
 {
     switch (pin) {
