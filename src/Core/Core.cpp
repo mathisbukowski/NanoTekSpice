@@ -109,6 +109,30 @@ void nts::Core::simulate()
     _tick++;
 }
 
+std::map<std::string, nts::Tristate> nts::Core::getOutputs()
+{
+    std::map<std::string, Tristate> outputs;
+
+    for (auto &component : _components) {
+        AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
+        if (comp->getType() == IComponent::OUTPUT)
+            outputs[comp->getName()] = comp->getPinValue(1);
+    }
+    return outputs;
+}
+
+std::map<std::string, nts::Tristate> nts::Core::getInputs()
+{
+    std::map<std::string, Tristate> inputs;
+
+    for (auto &component : _components) {
+        AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
+        if (comp->getType() == IComponent::INPUT)
+            inputs[comp->getName()] = comp->getPinValue(1);
+    }
+    return inputs;
+}
+
 void nts::Core::process(const std::string input)
 {
     try {
@@ -123,32 +147,6 @@ void nts::Core::process(const std::string input)
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
-}
-
-std::map<std::string, nts::Tristate> nts::Core::getInputs()
-{
-    std::map<std::string, Tristate> inputs;
-
-    for (auto &[name, component] : _components) {
-        AComponent *comp = dynamic_cast<AComponent *>(component.get());
-        if (comp->getType() == IComponent::INPUT)
-            inputs[name] = comp->compute(1);
-        if (comp->getType() == IComponent::CLOCK)
-            inputs[name] = comp->compute(1);
-    }
-    return inputs;
-}
-
-std::map<std::string, nts::Tristate> nts::Core::getOutputs()
-{
-    std::map<std::string, Tristate> outputs;
-
-    for (auto &[name, component] : _components) {
-        AComponent *comp = dynamic_cast<AComponent *>(component.get());
-        if (comp->getType() == IComponent::OUTPUT)
-            outputs[name] = comp->compute(1);
-    }
-    return outputs;
 }
 
 void nts::Core::addComponents(Parser *parser)
@@ -172,8 +170,10 @@ void nts::Core::addLinks(Parser *parser)
 
         if (_components.find(name1) == _components.end() || _components.find(name2) == _components.end())
             throw Core::CoreError("Error: invalid link");
-        _components[name1]->setLink(pin1, *_components[name2], pin2);
-        _components[name2]->setLink(pin2, *_components[name1], pin1);
+        AComponent *comp1 = dynamic_cast<AComponent *>(_components[name1].get());
+        AComponent *comp2 = dynamic_cast<AComponent *>(_components[name2].get());
+        comp1->setLink(pin1, *comp2, pin2);
+        comp2->setLink(pin2, *comp1, pin1);
     }
 }
 
