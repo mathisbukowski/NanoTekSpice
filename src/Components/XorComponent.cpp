@@ -32,5 +32,5 @@ nts::Tristate nts::XorComponent::compute(std::size_t pin)
 void nts::XorComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[3] = compute(3);
+    _pins[3] = computeInput(3);
 }

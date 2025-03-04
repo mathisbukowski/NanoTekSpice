@@ -58,5 +58,5 @@ void nts::Component4008::simulate(std::size_t tick)
 {
     (void)tick;
     for (size_t i = 10; i <= 13; i++)
-        _pins[i] = compute(i);
+        _pins[i] = computeInput(i);
 }

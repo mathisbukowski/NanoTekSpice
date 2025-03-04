@@ -30,5 +30,5 @@ nts::Tristate nts::NotComponent::compute(std::size_t pin)
 void nts::NotComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[2] = compute(2);
+    _pins[2] = computeInput(2);
 }

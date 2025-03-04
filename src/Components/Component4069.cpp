@@ -30,11 +30,11 @@ nts::Tristate nts::Component4069::compute(std::size_t pin)
 void nts::Component4069::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[2] = compute(2);
-    _pins[4] = compute(4);
-    _pins[6] = compute(6);
-    _pins[8] = compute(8);
-    _pins[10] = compute(10);
-    _pins[12] = compute(12);
+    _pins[2] = computeInput(2);
+    _pins[4] = computeInput(4);
+    _pins[6] = computeInput(6);
+    _pins[8] = computeInput(8);
+    _pins[10] = computeInput(10);
+    _pins[12] = computeInput(12);
 }
 

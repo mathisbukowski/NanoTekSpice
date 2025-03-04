@@ -39,5 +39,6 @@ void nts::LoggerComponent::simulate(std::size_t tick)
         if (byte == UNDEFINED)
             return;
         _logFile.write(reinterpret_cast<const char*>(&byte), sizeof(unsigned char));
+        _previousClock = clock;
     }
 }
