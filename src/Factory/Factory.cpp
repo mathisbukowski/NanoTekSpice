@@ -23,6 +23,7 @@
 #include "../Components/Specials/TrueComponent.hpp"
 #include "../Components/Specials/FalseComponent.hpp"
 #include "../Components/Elementary/XorComponent.hpp"
+#include "../Components/Advanced/Decoder.hpp"
 
 nts::Factory::Factory()
 {
@@ -42,6 +43,7 @@ nts::Factory::Factory()
             {"4069", [](){ return std::make_unique<Component4069>("4069"); }},
             {"4071", [](){ return std::make_unique<Component4071>("4071"); }},
             {"4081", [](){ return std::make_unique<Component4081>("4081"); }},
+            {"4514", []()  {return std::make_unique<Decoder>("4514");}}
     };
 }
 
