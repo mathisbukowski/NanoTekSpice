@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_CLOCKCOMPONENT_HPP
 #define NANOTEKSPICE_CLOCKCOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class ClockComponent : public AComponent {
@@ -18,6 +18,9 @@ namespace nts {
         Tristate compute(std::size_t pin) override;
         void simulate(std::size_t tick) override;
         void setPinValue(Tristate value);
+        void toggleState();
+    private:
+        Tristate _state;
     };
 };
 

@@ -14,9 +14,7 @@ nts::FalseComponent::FalseComponent(std::string name) : AComponent(name, FALSECO
 
 nts::Tristate nts::FalseComponent::compute(std::size_t pin)
 {
-    if (pin == 1)
-        return _pins[1];
-    return UNDEFINED;
+    return this->getPinValue(pin);
 }
 
 void nts::FalseComponent::simulate(std::size_t tick)

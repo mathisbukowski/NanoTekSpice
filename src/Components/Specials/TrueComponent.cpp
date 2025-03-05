@@ -14,9 +14,7 @@ nts::TrueComponent::TrueComponent(std::string name) : AComponent(name, TRUECOMPO
 
 nts::Tristate nts::TrueComponent::compute(std::size_t pin)
 {
-    if (pin == 1)
-        return _pins[1];
-    return UNDEFINED;
+    return this->getPinValue(pin);
 }
 
 void nts::TrueComponent::simulate(std::size_t tick)

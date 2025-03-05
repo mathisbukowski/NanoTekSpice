@@ -14,13 +14,10 @@ nts::OutputComponent::OutputComponent(std::string name) : AComponent(name, OUTPU
 
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
-    if (pin == 1)
-        return getLink(1);
-    return UNDEFINED;
+    return this->computeInput(pin);
 }
 
 void nts::OutputComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[1] = computeInput(1);
 }

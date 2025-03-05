@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_INPUTCOMPONENT_HPP
 #define NANOTEKSPICE_INPUTCOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class InputComponent : public AComponent {

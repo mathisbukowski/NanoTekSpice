@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_FALSECOMPONENT_HPP
 #define NANOTEKSPICE_FALSECOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class FalseComponent : public AComponent {

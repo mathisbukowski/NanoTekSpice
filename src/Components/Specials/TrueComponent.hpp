@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_TRUECOMPONENT_HPP
 #define NANOTEKSPICE_TRUECOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class TrueComponent : public AComponent {

@@ -14,9 +14,7 @@ nts::InputComponent::InputComponent(std::string name) : AComponent(name, INPUT)
 
 nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
-    if (pin == 1)
-        return _pins[1];
-    return UNDEFINED;
+    return this->getPinValue(pin);
 }
 
 void nts::InputComponent::simulate(std::size_t tick)
