@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_ANDCOMPONENT_HPP
 #define NANOTEKSPICE_ANDCOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class AndComponent : public AComponent {

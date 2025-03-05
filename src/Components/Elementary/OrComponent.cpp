@@ -17,8 +17,8 @@ nts::OrComponent::OrComponent(std::string name) : AComponent(name, OR)
 nts::Tristate nts::OrComponent::compute(std::size_t pin)
 {
     if (pin == 3) {
-        Tristate a = getLink(1);
-        Tristate b = getLink(2);
+        Tristate a = this->computeInput(1);
+        Tristate b = this->computeInput(2);
 
         if (a == UNDEFINED && b == UNDEFINED)
             return UNDEFINED;
@@ -35,5 +35,5 @@ nts::Tristate nts::OrComponent::compute(std::size_t pin)
 void nts::OrComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[3] = computeInput(3);
+    _pins[3] = this->computeInput(3);
 }

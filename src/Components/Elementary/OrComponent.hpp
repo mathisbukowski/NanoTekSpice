@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_ORCOMPONENT_HPP
 #define NANOTEKSPICE_ORCOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class OrComponent : public AComponent {

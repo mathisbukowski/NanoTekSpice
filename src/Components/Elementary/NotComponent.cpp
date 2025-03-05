@@ -16,7 +16,7 @@ nts::NotComponent::NotComponent(std::string name) : AComponent(name, NOT)
 nts::Tristate nts::NotComponent::compute(std::size_t pin)
 {
     if (pin == 2) {
-        Tristate a = getLink(1);
+        Tristate a = this->computeInput(1);
 
         if (a == TRUE)
             return FALSE;
@@ -30,5 +30,5 @@ nts::Tristate nts::NotComponent::compute(std::size_t pin)
 void nts::NotComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[2] = computeInput(2);
+    _pins[2] = this->computeInput(2);
 }

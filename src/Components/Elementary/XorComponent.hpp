@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_XORCOMPONENT_HPP
 #define NANOTEKSPICE_XORCOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class XorComponent : public AComponent {

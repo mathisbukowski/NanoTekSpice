@@ -8,7 +8,7 @@
 #ifndef NANOTEKSPICE_NOTCOMPONENT_HPP
 #define NANOTEKSPICE_NOTCOMPONENT_HPP
 
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 namespace nts {
     class NotComponent : public AComponent {
