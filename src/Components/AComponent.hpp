@@ -18,7 +18,6 @@ namespace nts {
         virtual ~AComponent() = default;
 
         void setLink(std::size_t pin, IComponent &other, std::size_t otherPin) override;
-        Tristate getLink(std::size_t pin) const;
         void setPinValue(std::size_t pin, Tristate value);
         Tristate getPinValue(std::size_t pin) const;
 
