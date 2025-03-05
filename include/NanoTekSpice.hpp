@@ -42,7 +42,7 @@ namespace nts {
                 C4069,
                 C4071,
                 C4081,
-                LOGGER
+                DECODER,
           };
           virtual ~IComponent() = default;
           virtual void simulate(std::size_t tick) = 0;
