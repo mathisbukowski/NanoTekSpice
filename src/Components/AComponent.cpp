@@ -47,26 +47,14 @@ void nts::AComponent::setName(const std::string& name)
     _name = name;
 }
 
-
-nts::Tristate nts::AComponent::getLink(std::size_t pin) const
-{
-    if (_links.find(pin) == _links.end())
-        return UNDEFINED;
-    IComponent* linkedComponent = _links.at(pin).first;
-    std::size_t linkedPin = _links.at(pin).second;
-    AComponent* linkedAComponent = dynamic_cast<AComponent*>(linkedComponent);
-    if (linkedAComponent)
-        return linkedAComponent->getPinValue(linkedPin);
-    return UNDEFINED;
-}
-
 nts::Tristate nts::AComponent::computeInput(size_t pin) const
 {
-    if (_links.find(pin) == _links.end())
+    auto it = _links.find(pin);
+    if (it == _links.end())
         return UNDEFINED;
 
-    IComponent* linkedComponent = _links.at(pin).first;
-    std::size_t linkedPin = _links.at(pin).second;
+    IComponent* linkedComponent = it->second.first;
+    std::size_t linkedPin = it->second.second;
     return linkedComponent->compute(linkedPin);
 }
 

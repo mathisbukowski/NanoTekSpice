@@ -11,7 +11,6 @@
 #include <memory>
 
 #include "Components/AComponent.hpp"
-#include "Components/ClockComponent.hpp"
 #include "Factory/Factory.hpp"
 
 nts::Core::Core() : _tick(0)
@@ -97,15 +96,9 @@ void nts::Core::simulate()
 {
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
-        if (comp->getType() == IComponent::CLOCK) {
-            ClockComponent *clockComp = dynamic_cast<ClockComponent *>(comp);
-            clockComp->simulate(_tick);
-            applyPendingInputs();
-        } else {
-            applyPendingInputs();
-            comp->simulate(_tick);
-        }
+        comp->simulate(_tick);
     }
+    applyPendingInputs();
     _tick++;
 }
 
@@ -116,7 +109,7 @@ std::map<std::string, nts::Tristate> nts::Core::getOutputs()
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         if (comp->getType() == IComponent::OUTPUT)
-            outputs[comp->getName()] = comp->getPinValue(1);
+            outputs[comp->getName()] = comp->computeInput(1);
     }
     return outputs;
 }
@@ -127,7 +120,7 @@ std::map<std::string, nts::Tristate> nts::Core::getInputs()
 
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
-        if (comp->getType() == IComponent::INPUT)
+        if (comp->getType() == IComponent::INPUT || comp->getType() == IComponent::CLOCK)
             inputs[comp->getName()] = comp->getPinValue(1);
     }
     return inputs;
@@ -144,6 +137,8 @@ void nts::Core::process(const std::string input)
             editValueViaInput(input);
         else if (input == "loop")
             loopEmulate();
+        else
+            std::cout << "Unknown command" << std::endl;
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
@@ -182,8 +177,7 @@ int nts::Core::loop()
 {
     std::string input;
 
-
-    signal(SIGINT, [](int) { nts::Core::exit(); });
+    signal(SIGINT, [](int) { exit(); });
     while (true) {
         std::cout << "> ";
         if (std::getline(std::cin, input).eof())
