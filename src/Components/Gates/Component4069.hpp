@@ -7,7 +7,7 @@
 
 #ifndef COMPONENT4069_HPP
 #define COMPONENT4069_HPP
-#include "AComponent.hpp"
+#include "../AComponent.hpp"
 
 
 namespace nts {

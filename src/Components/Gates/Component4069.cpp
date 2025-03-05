@@ -19,7 +19,7 @@ nts::Tristate nts::Component4069::compute(std::size_t pin)
 
     if (pin == 2 || pin == 4 || pin == 6 || pin == 8 || pin == 10 || pin == 12) {
         getInput(&input1, pin);
-        Tristate a = getLink(input1);
+        Tristate a = this->computeInput(input1);
         if (a == UNDEFINED)
             return UNDEFINED;
         return (a == TRUE) ? FALSE : TRUE;
@@ -30,11 +30,11 @@ nts::Tristate nts::Component4069::compute(std::size_t pin)
 void nts::Component4069::simulate(std::size_t tick)
 {
     (void)tick;
-    _pins[2] = computeInput(2);
-    _pins[4] = computeInput(4);
-    _pins[6] = computeInput(6);
-    _pins[8] = computeInput(8);
-    _pins[10] = computeInput(10);
-    _pins[12] = computeInput(12);
+    _pins[2] = this->computeInput(2);
+    _pins[4] = this->computeInput(4);
+    _pins[6] = this->computeInput(6);
+    _pins[8] = this->computeInput(8);
+    _pins[10] = this->computeInput(10);
+    _pins[12] = this->computeInput(12);
 }
 
