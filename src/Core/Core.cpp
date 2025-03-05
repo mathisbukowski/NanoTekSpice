@@ -47,8 +47,8 @@ void nts::Core::loopEmulate()
     std::signal(SIGINT, signalHandler);
 
     while (!stopLoop) {
-        simulate();
-        dump();
+        this->simulate();
+        this->dump();
     }
 }
 
@@ -75,7 +75,7 @@ void nts::Core::editValueViaInput(const std::string& input)
     if (_components.find(name) == _components.end())
         throw CoreError("Error: invalid input");
     tristateValue = value == "U" ? UNDEFINED : value == "1" ? TRUE : FALSE;
-    setPendingInput(name, tristateValue);
+    this->setPendingInput(name, tristateValue);
 }
 
 void nts::Core::setPendingInput(const std::string& name, Tristate value)
@@ -98,7 +98,7 @@ void nts::Core::simulate()
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         comp->simulate(_tick);
     }
-    applyPendingInputs();
+    this->applyPendingInputs();
     _tick++;
 }
 
@@ -130,13 +130,13 @@ void nts::Core::process(const std::string input)
 {
     try {
         if (input == "display")
-            dump();
+            this->dump();
         else if (input == "simulate")
-            simulate();
+            this->simulate();
         else if (input.find('=') != std::string::npos)
-            editValueViaInput(input);
+            this->editValueViaInput(input);
         else if (input == "loop")
-            loopEmulate();
+            this->loopEmulate();
         else
             std::cout << "Unknown command" << std::endl;
     } catch (const std::exception &e) {
@@ -164,7 +164,7 @@ void nts::Core::addLinks(Parser *parser)
         const auto &[name2, pin2] = link.second;
 
         if (_components.find(name1) == _components.end() || _components.find(name2) == _components.end())
-            throw Core::CoreError("Error: invalid link");
+            throw CoreError("Error: invalid link");
         AComponent *comp1 = dynamic_cast<AComponent *>(_components[name1].get());
         AComponent *comp2 = dynamic_cast<AComponent *>(_components[name2].get());
         comp1->setLink(pin1, *comp2, pin2);
@@ -177,14 +177,14 @@ int nts::Core::loop()
 {
     std::string input;
 
-    signal(SIGINT, [](int) { exit(); });
+    signal(SIGINT, [](int) { this->exit(); });
     while (true) {
         std::cout << "> ";
         if (std::getline(std::cin, input).eof())
             std::exit(0);
         if (input == "exit")
-            exit();
-        process(input);
+            this->exit();
+        this->process(input);
     }
 }
 
@@ -197,16 +197,16 @@ int nts::Core::run(const char *file)
         std::cerr << "Usage: ./nanotekspice [file]" << std::endl;
         return 84;
     }
-    if (getAllArgs(parser, file) == 84)
+    if (this->getAllArgs(parser, file) == 84)
         return 84;
-    addComponents(parser);
+    this->addComponents(parser);
     try {
-        addLinks(parser);
+        this->addLinks(parser);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;
     }
-    loop();
+    this->loop();
     return 0;
 }
 
@@ -221,14 +221,14 @@ std::string nts::Core::valueToString(Tristate &value)
 
 void nts::Core::dump()
 {
-    std::cout << "tick: " << getTick() << std::endl;
+    std::cout << "tick: " << this->getTick() << std::endl;
     std::cout << "input(s):" << std::endl;
-    for (auto &p : getInputs()) {
-        std::cout << "  " <<  p.first << ": " << valueToString(p.second) << std::endl;
+    for (auto &p : this->getInputs()) {
+        std::cout << "  " <<  p.first << ": " << this->valueToString(p.second) << std::endl;
     }
     std::cout << "output(s):" << std::endl;
-    for (auto &p : getOutputs()) {
-        std::cout << "  " <<  p.first << ": " << valueToString(p.second)  << std::endl;
+    for (auto &p : this->getOutputs()) {
+        std::cout << "  " <<  p.first << ": " << this->valueToString(p.second)  << std::endl;
     }
 }
 
