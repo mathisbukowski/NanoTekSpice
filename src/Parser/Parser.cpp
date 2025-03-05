@@ -31,7 +31,7 @@ void nts::Parser::parseFile(const std::string &filename)
     if (!inputFile.is_open())
         throw ParserError("Error: file not found");
     while (std::getline(inputFile, line)) {
-        line = cleanStr(line);
+        line = this->cleanStr(line);
         if (line.size() > 0)
             _input.push_back(line);
     }
@@ -67,7 +67,7 @@ void nts::Parser::getChipsets()
 {
     for (size_t i = 0; i < _input.size(); i++) {
         if (_input[i] == ".chipsets:") {
-            parseChipsets(i);
+            this->parseChipsets(i);
             break;
         }
     }
@@ -81,7 +81,7 @@ void nts::Parser::parseChipsets(size_t &i)
 
     i++;
     while (i < _input.size() && _input[i] != ".links:") {
-        parseChipsetLine(_input[i], type, name);
+        this->parseChipsetLine(_input[i], type, name);
         if (chipsetsName.find(name) != chipsetsName.end())
             throw ParserError("Error: duplicate chispet name");
         _chipsets.emplace_back(type, name);
@@ -111,7 +111,7 @@ void nts::Parser::getLinks()
 {
     for (size_t i = 0; i < _input.size(); i++) {
         if (_input[i] == ".links:") {
-            parseLinks(i);
+            this->parseLinks(i);
             break;
         }
     }
@@ -169,7 +169,7 @@ bool nts::Parser::checkContentOfInputFile()
     if (_links.empty())
         throw ParserError("Error: no links found");
     for (auto &link : _links) {
-        if (findLinksInChipsets(link) == 84)
+        if (this->findLinksInChipsets(link) == 84)
             throw ParserError("Error: link not found in chipsets");
     }
     return true;
