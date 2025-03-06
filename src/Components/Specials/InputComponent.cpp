@@ -22,7 +22,7 @@ void nts::InputComponent::simulate(std::size_t tick)
     (void)tick;
 }
 
-void nts::InputComponent::setPinValue(Tristate value)
+void nts::InputComponent::setValue(Tristate value)
 {
     _pins[1] = value;
 }

@@ -9,7 +9,7 @@
 
 #include <csignal>
 #include <memory>
-
+#include "../Components/Specials/ClockComponent.hpp"
 #include "Components/AComponent.hpp"
 #include "Factory/Factory.hpp"
 
@@ -87,18 +87,18 @@ void nts::Core::applyPendingInputs()
 {
     for (const auto& [name, value] : _pendingInputs) {
         AComponent *comp = dynamic_cast<AComponent *>(_components[name].get());
-        comp->setPinValue(1, value);
+        comp->setValue(value);
     }
     _pendingInputs.clear();
 }
 
 void nts::Core::simulate()
 {
+    applyPendingInputs();
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         comp->simulate(_tick);
     }
-    applyPendingInputs();
     _tick++;
 }
 
@@ -109,7 +109,7 @@ std::map<std::string, nts::Tristate> nts::Core::getOutputs()
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         if (comp->getType() == IComponent::OUTPUT)
-            outputs[comp->getName()] = comp->computeInput(1);
+            outputs[comp->getName()] = comp->compute(1);
     }
     return outputs;
 }
@@ -121,7 +121,7 @@ std::map<std::string, nts::Tristate> nts::Core::getInputs()
     for (auto &component : _components) {
         AComponent *comp = dynamic_cast<AComponent *>(component.second.get());
         if (comp->getType() == IComponent::INPUT || comp->getType() == IComponent::CLOCK)
-            inputs[comp->getName()] = comp->getPinValue(1);
+            inputs[comp->getName()] = comp->compute(1);
     }
     return inputs;
 }

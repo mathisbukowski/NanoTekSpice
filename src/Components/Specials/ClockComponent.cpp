@@ -9,29 +9,33 @@
 
 nts::ClockComponent::ClockComponent(std::string name) : AComponent(name, CLOCK)
 {
-    _pins[1] = UNDEFINED;
+    _pins[1] = {};
     _state = UNDEFINED;
+    _tmpState = UNDEFINED;
 }
 
 void nts::ClockComponent::toggleState()
 {
-    _state = _state == TRUE ? FALSE : TRUE;
-    this->setPinValue(_state);
+    _state = _tmpState;
+    if (_state == UNDEFINED)
+        return;
+    _tmpState = _state == TRUE ? FALSE : TRUE;
 }
 
 nts::Tristate nts::ClockComponent::compute(std::size_t pin)
 {
-    return this->getPinValue(pin);
+    if (pin != 1)
+        return UNDEFINED;
+    return _state;
 }
 
 void nts::ClockComponent::simulate(std::size_t tick)
 {
-    if (tick == 0)
-        return;
+    (void)tick;
     this->toggleState();
 }
 
-void nts::ClockComponent::setPinValue(Tristate value)
+void nts::ClockComponent::setValue(Tristate value)
 {
-    _pins[1] = value;
+    _tmpState = value;
 }
