@@ -17,7 +17,7 @@ namespace nts {
         ~InputComponent() = default;
         Tristate compute(std::size_t pin) override;
         void simulate(std::size_t tick) override;
-        void setPinValue(Tristate value);
+        void setValue(Tristate value) override;
     };
 };
 
